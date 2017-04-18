@@ -11,6 +11,7 @@
 @interface ViewController ()
 @property (strong, nonatomic) EAGLContext *context;
 @property (assign, nonatomic) GLuint shaderProgram;
+@property (assign, nonatomic) GLfloat elapsedTime;
 @end
 
 @implementation ViewController
@@ -42,8 +43,8 @@
 - (void)update {
     // 距离上一次调用update过了多长时间，比如一个游戏物体速度是3m/s,那么每一次调用update，
     // 他就会行走3m/s * deltaTime，这样做就可以让游戏物体的行走实际速度与update调用频次无关
-    // NSTimeInterval deltaTime = self.timeSinceLastUpdate;
-    
+    NSTimeInterval deltaTime = self.timeSinceLastUpdate;
+    self.elapsedTime += deltaTime;
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
@@ -53,6 +54,10 @@
     
     // 使用fragment.glsl 和 vertex.glsl中的shader
     glUseProgram(self.shaderProgram);
+    // 设置shader中的 uniform elapsedTime 的值
+    GLuint elapsedTimeUniformLocation = glGetUniformLocation(self.shaderProgram, "elapsedTime");
+    glUniform1f(elapsedTimeUniformLocation, (GLfloat)self.elapsedTime);
+    
     [self drawTriangle];
 }
 
