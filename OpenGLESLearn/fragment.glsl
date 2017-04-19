@@ -4,5 +4,5 @@ uniform highp float elapsedTime;
 void main(void) {
     highp float processedElapsedTime = elapsedTime;
     highp float intensity = (sin(processedElapsedTime) + 1.0) / 2.0;
-    gl_FragColor = fragColor * intensity;
+    gl_FragColor = fragColor * 1.0;
 }

@@ -16,6 +16,7 @@
 		8E689D241EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */; };
 		8E689D331EA5E21200ADB0A8 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D301EA5E21200ADB0A8 /* fragment.glsl */; };
 		8E689D341EA5E21200ADB0A8 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D311EA5E21200ADB0A8 /* vertex.glsl */; };
+		8E689D371EA759B900ADB0A8 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E689D361EA759B900ADB0A8 /* OpenGLES.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		8E689D251EA5E1EB00ADB0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E689D301EA5E21200ADB0A8 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		8E689D311EA5E21200ADB0A8 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
+		8E689D361EA759B900ADB0A8 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E689D371EA759B900ADB0A8 /* OpenGLES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +73,7 @@
 				8E689D081EA5E1EB00ADB0A8 /* OpenGLESLearn */,
 				8E689D221EA5E1EB00ADB0A8 /* OpenGLESLearnTests */,
 				8E689D071EA5E1EB00ADB0A8 /* Products */,
+				8E689D351EA759B900ADB0A8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,6 +119,14 @@
 				8E689D251EA5E1EB00ADB0A8 /* Info.plist */,
 			);
 			path = OpenGLESLearnTests;
+			sourceTree = "<group>";
+		};
+		8E689D351EA759B900ADB0A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8E689D361EA759B900ADB0A8 /* OpenGLES.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -426,6 +438,7 @@
 				8E689D2A1EA5E1EB00ADB0A8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8E689D2B1EA5E1EB00ADB0A8 /* Build configuration list for PBXNativeTarget "OpenGLESLearnTests" */ = {
 			isa = XCConfigurationList;
@@ -434,6 +447,7 @@
 				8E689D2D1EA5E1EB00ADB0A8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
