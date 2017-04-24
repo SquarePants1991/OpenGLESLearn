@@ -35,6 +35,7 @@
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    view.drawableMultisample = GLKViewDrawableMultisample4X;
     [EAGLContext setCurrentContext:self.context];
 }
 
@@ -58,16 +59,10 @@
     GLuint elapsedTimeUniformLocation = glGetUniformLocation(self.shaderProgram, "elapsedTime");
     glUniform1f(elapsedTimeUniformLocation, (GLfloat)self.elapsedTime);
     
-    [self drawTriangle];
+    [self drawTriangleFan];
 }
 
-- (void)drawTriangle {
-    static GLfloat triangleData[18] = {
-        0,      0.5f,  0,  1,  0,  0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
-        -0.5f, -0.5f,  0,  0,  1,  0,
-        0.5f,  -0.5f,  0,  0,  0,  1,
-    };
-    
+- (void)bindAttribs:(GLfloat *)triangleData {
     // 启用Shader中的两个属性
     // attribute vec4 position;
     // attribute vec4 color;
@@ -86,8 +81,88 @@
     // ptr: 数据开始的指针，位置就是从头开始，颜色则跳过3个GLFloat的大小
     glVertexAttribPointer(positionAttribLocation, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (char *)triangleData);
     glVertexAttribPointer(colorAttribLocation, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (char *)triangleData + 3 * sizeof(GLfloat));
-    
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+#pragma mark - Draw Many Things
+- (void)drawTriangle {
+    static GLfloat triangleData[36] = {
+        0,      0.5f,  0,  1,  0,  0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
+        -0.5f,  0.0f,  0,  0,  1,  0,
+        0.5f,   0.0f,  0,  0,  0,  1,
+        0,      -0.5f,  0,  1,  0,  0,
+        -0.5f,  0.0f,  0,  0,  1,  0,
+        0.5f,   0.0f,  0,  0,  0,  1,
+        
+        
+    };
+    [self bindAttribs:triangleData];
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+- (void)drawTriangleStrip {
+    static GLfloat triangleData[] = {
+        0,      0.5f,  0,  1,  0,  0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
+        -0.5f,  0.0f,  0,  0,  1,  0,
+        0.5f,   0.0f,  0,  0,  0,  1,
+        0,      -0.5f,  0,  1,  0,  0,
+    };
+    [self bindAttribs:triangleData];
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+- (void)drawTriangleFan {
+    static GLfloat triangleData[] = {
+        -0.5f,  0.0f,  0,  0,  1,  0,
+        0,      0.5f,  0,  1,  0,  0,
+        0.5f,   0.0f,  0,  0,  0,  1,
+        0,      -0.5f,  0,  1,  0,  0,
+    };
+    [self bindAttribs:triangleData];
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
+- (void)drawLines {
+    static GLfloat lineData[] = {
+        0.0f,  0.0f,  0,  0,  1,  0,
+        0.5,   0.5f,  0,  1,  0,  0,
+        0.0f,  0.0f,  0,  0,  0,  1,
+        0.5,   -0.5f, 0,  1,  0,  0,
+    };
+    [self bindAttribs:lineData];
+    glLineWidth(5);
+    glDrawArrays(GL_LINES, 0, 4);
+}
+
+- (void)drawLinesStrip {
+    static GLfloat lineData[] = {
+        0.0f,  0.0f,  0,  0,  1,  0,
+        0.5,   0.5f,  0,  1,  0,  0,
+        0.5,   -0.5f, 0,  1,  0,  0,
+    };
+    [self bindAttribs:lineData];
+    glLineWidth(5);
+    glDrawArrays(GL_LINE_STRIP, 0, 3);
+}
+
+- (void)drawLinesLoop {
+    static GLfloat lineData[] = {
+        0.0f,  0.0f,  0,  0,  1,  0,
+        0.5,   0.5f,  0,  1,  0,  0,
+        0.5,   -0.5f, 0,  1,  0,  0,
+    };
+    [self bindAttribs:lineData];
+    glLineWidth(5);
+    glDrawArrays(GL_LINE_LOOP, 0, 3);
+}
+
+- (void)drawPoints {
+    static GLfloat lineData[] = {
+        0.0f,  0.0f,  0,  0,  1,  0,
+        0.5,   0.5f,  0,  1,  0,  0,
+        0.5,   -0.5f, 0,  1,  0,  0,
+    };
+    [self bindAttribs:lineData];
+    glDrawArrays(GL_POINTS, 0, 3);
 }
 
 #pragma mark - Prepare Shaders
