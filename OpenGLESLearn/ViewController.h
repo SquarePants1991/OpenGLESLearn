@@ -6,9 +6,9 @@
 //  Copyright (c) 2015年 wangyang. All rights reserved.
 //
 
-#import <GLKit/GLKit.h>
+#import "GLBaseViewController.h"
 
-@interface ViewController : GLKViewController
+@interface ViewController : GLBaseViewController
 
 
 @end

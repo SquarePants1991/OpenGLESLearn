@@ -16,6 +16,7 @@
 		8E689D241EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */; };
 		8E689D331EA5E21200ADB0A8 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D301EA5E21200ADB0A8 /* fragment.glsl */; };
 		8E689D341EA5E21200ADB0A8 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D311EA5E21200ADB0A8 /* vertex.glsl */; };
+		8EBB9E5E1EADFC4E0095A77B /* GLBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EBB9E5D1EADFC4E0095A77B /* GLBaseViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,8 @@
 		8E689D251EA5E1EB00ADB0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E689D301EA5E21200ADB0A8 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		8E689D311EA5E21200ADB0A8 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
+		8EBB9E5C1EADFC4E0095A77B /* GLBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBaseViewController.h; sourceTree = "<group>"; };
+		8EBB9E5D1EADFC4E0095A77B /* GLBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLBaseViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,8 @@
 			children = (
 				8E689D301EA5E21200ADB0A8 /* fragment.glsl */,
 				8E689D311EA5E21200ADB0A8 /* vertex.glsl */,
+				8EBB9E5C1EADFC4E0095A77B /* GLBaseViewController.h */,
+				8EBB9E5D1EADFC4E0095A77B /* GLBaseViewController.m */,
 				8E689D0C1EA5E1EB00ADB0A8 /* AppDelegate.h */,
 				8E689D0D1EA5E1EB00ADB0A8 /* AppDelegate.m */,
 				8E689D0F1EA5E1EB00ADB0A8 /* ViewController.h */,
@@ -225,6 +230,7 @@
 			files = (
 				8E689D111EA5E1EB00ADB0A8 /* ViewController.m in Sources */,
 				8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */,
+				8EBB9E5E1EADFC4E0095A77B /* GLBaseViewController.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -426,6 +432,7 @@
 				8E689D2A1EA5E1EB00ADB0A8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8E689D2B1EA5E1EB00ADB0A8 /* Build configuration list for PBXNativeTarget "OpenGLESLearnTests" */ = {
 			isa = XCConfigurationList;
@@ -434,6 +441,7 @@
 				8E689D2D1EA5E1EB00ADB0A8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
