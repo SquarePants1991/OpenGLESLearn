@@ -9,54 +9,67 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-@property (assign, nonatomic) GLKMatrix4 transformMatrix;
+@property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
+@property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
+@property (assign, nonatomic) GLKMatrix4 modelMatrix1; // 第一个矩形的模型变换
+@property (assign, nonatomic) GLKMatrix4 modelMatrix2; // 第二个矩形的模型变换
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.transformMatrix = GLKMatrix4Identity;
+    
+    // 使用透视投影矩阵
+    float aspect = self.view.frame.size.width / self.view.frame.size.height;
+    self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 100.0);
+    
+    // 设置摄像机在 0，0，2 坐标，看向 0，0，0点。Y轴正向为摄像机顶部指向的方向
+    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+    
+    // 先初始化矩形1的模型矩阵为单位矩阵
+    self.modelMatrix1 = GLKMatrix4Identity;
+    // 先初始化矩形2的模型矩阵为单位矩阵
+    self.modelMatrix2 = GLKMatrix4Identity;
 }
 
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    float varyingFactor = self.elapsedTime;
+    float varyingFactor = (sin(self.elapsedTime) + 1) / 2.0; // 0 ~ 1
+    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2 * (varyingFactor + 1), 0, 0, 0, 0, 1, 0);
     
-    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(varyingFactor, 0, 1, 0);
-#define UsePerspective // 注释这行运行查看正交投影效果，解除注释运行查看透视投影效果
-#ifdef UsePerspective
-    // 透视投影
-    float aspect = self.view.frame.size.width / self.view.frame.size.height;
-    GLKMatrix4 perspectiveMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 10.0);
-    GLKMatrix4 translateMatrix = GLKMatrix4MakeTranslation(0, 0, -1.6);
-    self.transformMatrix = GLKMatrix4Multiply(translateMatrix, rotateMatrix);
-    self.transformMatrix = GLKMatrix4Multiply(perspectiveMatrix, self.transformMatrix);
-#else
-    // 正交投影
-    float viewWidth = self.view.frame.size.width;
-    float viewHeight = self.view.frame.size.height;
-    GLKMatrix4 orthMatrix = GLKMatrix4MakeOrtho(-viewWidth/2, viewWidth/2, -viewHeight / 2, viewHeight/2, -10, 10);
-    GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(200, 200, 200);
-    self.transformMatrix = GLKMatrix4Multiply(scaleMatrix, rotateMatrix);
-    self.transformMatrix = GLKMatrix4Multiply(orthMatrix, self.transformMatrix);
-#endif
+    GLKMatrix4 translateMatrix1 = GLKMatrix4MakeTranslation(-0.7, 0, 0);
+    GLKMatrix4 rotateMatrix1 = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 0, 1, 0);
+    self.modelMatrix1 = GLKMatrix4Multiply(translateMatrix1, rotateMatrix1);
     
+    GLKMatrix4 translateMatrix2 = GLKMatrix4MakeTranslation(0.7, 0, 0);
+    GLKMatrix4 rotateMatrix2 = GLKMatrix4MakeRotation(varyingFactor * M_PI, 0, 0, 1);
+    self.modelMatrix2 = GLKMatrix4Multiply(translateMatrix2, rotateMatrix2);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     [super glkView:view drawInRect:rect];
+  
+    GLuint projectionMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "projectionMatrix");
+    glUniformMatrix4fv(projectionMatrixUniformLocation, 1, 0, self.projectionMatrix.m);
+    GLuint cameraMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "cameraMatrix");
+    glUniformMatrix4fv(cameraMatrixUniformLocation, 1, 0, self.cameraMatrix.m);
     
-    GLuint transformUniformLocation = glGetUniformLocation(self.shaderProgram, "transform");
-    glUniformMatrix4fv(transformUniformLocation, 1, 0, self.transformMatrix.m);
-    [self drawTriangle];
+    GLuint modelMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "modelMatrix");
+    // 绘制第一个矩形
+    glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix1.m);
+    [self drawRectangle];
+    
+    // 绘制第二个矩形
+    glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix2.m);
+    [self drawRectangle];
 }
 
 
 #pragma mark - Draw Many Things
-- (void)drawTriangle {
+- (void)drawRectangle {
     static GLfloat triangleData[36] = {
         -0.5,   0.5f,  0,   1,  0,  0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
         -0.5f,  -0.5f,  0,  0,  1,  0,
