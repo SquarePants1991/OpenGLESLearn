@@ -1,8 +1,14 @@
 varying lowp vec4 fragColor;
+varying lowp vec2 fragUV;
+
 uniform highp float elapsedTime;
+uniform sampler2D diffuseMap;
+uniform int useDiffuseMap;
 
 void main(void) {
-    highp float processedElapsedTime = elapsedTime;
-    highp float intensity = (sin(processedElapsedTime) + 1.0) / 4.0 + 0.5;
-    gl_FragColor = fragColor * intensity;
+    if (useDiffuseMap == 1) {
+        gl_FragColor = texture2D(diffuseMap, fragUV);
+    } else {
+        gl_FragColor = fragColor;
+    }
 }
