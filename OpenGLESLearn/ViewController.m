@@ -7,11 +7,16 @@
 //
 
 #import "ViewController.h"
+#import <OpenGLES/ES2/glext.h>
 
 @interface ViewController () {
     GLuint textureID;
     GLuint framebufferID;
     GLuint depthBufferID;
+    GLuint sampleFramebuffer;
+    GLuint sampleColorRenderbuffer;
+    GLuint sampleDepthRenderbuffer;
+    int textureWidth, textureHeight;
 }
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
@@ -32,7 +37,11 @@
     
     self.modelMatrix = GLKMatrix4Identity;
     
+    
+    textureWidth = 1024;
+    textureHeight = 1024;
     [self createTextureFramebuffer];
+    [self createMultisampleFramebuffer];
 }
 
 #pragma mark - Create Texture Framebuffer
@@ -43,7 +52,7 @@
     
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -52,10 +61,25 @@
     
     glGenRenderbuffers(1, &depthBufferID);
     glBindRenderbuffer(GL_RENDERBUFFER, depthBufferID);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, 1024, 1024);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, textureWidth, textureHeight);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferID);
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+- (void)createMultisampleFramebuffer {
+    glGenFramebuffers(1, &sampleFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
+    
+    glGenRenderbuffers(1, &sampleColorRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
+    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_RGBA8_OES, textureWidth, textureHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    glGenRenderbuffers(1, &sampleDepthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleDepthRenderbuffer);
+    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16, 1024, 1024);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sampleDepthRenderbuffer);
 }
 
 #pragma mark - Update Delegate
@@ -71,9 +95,8 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
 
-    glViewport(0, 0, 1024, 1024);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
-    glEnable(GL_DEPTH_TEST);
+    glViewport(0, 0, textureWidth, textureHeight);
+    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
     [super glkView:view drawInRect:rect];
   
     GLuint projectionMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "projectionMatrix");
@@ -87,6 +110,9 @@
     glUniform1i(useDiffuseMapUniformLocation, 0);
     [self drawCube];
     
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, framebufferID);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, sampleFramebuffer);
+    glResolveMultisampleFramebufferAPPLE();
     
     [((GLKView *) self.view) bindDrawable];
     glActiveTexture(GL_TEXTURE0);
