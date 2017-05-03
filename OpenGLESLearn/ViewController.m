@@ -11,8 +11,7 @@
 @interface ViewController ()
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
-@property (assign, nonatomic) GLKMatrix4 modelMatrix1; // 第一个矩形的模型变换
-@property (assign, nonatomic) GLKMatrix4 modelMatrix2; // 第二个矩形的模型变换
+@property (assign, nonatomic) GLKMatrix4 modelMatrix;
 @end
 
 @implementation ViewController
@@ -27,10 +26,7 @@
     // 设置摄像机在 0，0，2 坐标，看向 0，0，0点。Y轴正向为摄像机顶部指向的方向
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
     
-    // 先初始化矩形1的模型矩阵为单位矩阵
-    self.modelMatrix1 = GLKMatrix4Identity;
-    // 先初始化矩形2的模型矩阵为单位矩阵
-    self.modelMatrix2 = GLKMatrix4Identity;
+    self.modelMatrix = GLKMatrix4Identity;
 }
 
 #pragma mark - Update Delegate
@@ -40,13 +36,8 @@
     float varyingFactor = (sin(self.elapsedTime) + 1) / 2.0; // 0 ~ 1
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2 * (varyingFactor + 1), 0, 0, 0, 0, 1, 0);
     
-    GLKMatrix4 translateMatrix1 = GLKMatrix4MakeTranslation(-0.7, 0, 0);
-    GLKMatrix4 rotateMatrix1 = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 0, 1, 0);
-    self.modelMatrix1 = GLKMatrix4Multiply(translateMatrix1, rotateMatrix1);
-    
-    GLKMatrix4 translateMatrix2 = GLKMatrix4MakeTranslation(0.7, 0, 0);
-    GLKMatrix4 rotateMatrix2 = GLKMatrix4MakeRotation(varyingFactor * M_PI, 0, 0, 1);
-    self.modelMatrix2 = GLKMatrix4Multiply(translateMatrix2, rotateMatrix2);
+    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 1, 1, 1);
+    self.modelMatrix = rotateMatrix;
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
@@ -58,13 +49,8 @@
     glUniformMatrix4fv(cameraMatrixUniformLocation, 1, 0, self.cameraMatrix.m);
     
     GLuint modelMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "modelMatrix");
-    // 绘制第一个矩形
-    glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix1.m);
-    [self drawRectangle];
-    
-    // 绘制第二个矩形
-    glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix2.m);
-    [self drawRectangle];
+    glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix.m);
+    [self drawCube];
 }
 
 
@@ -80,6 +66,71 @@
     };
     [self bindAttribs:triangleData];
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+- (void)drawCube {
+    [self drawXPlanes];
+    [self drawYPlanes];
+    [self drawZPlanes];
+}
+
+- (void)drawXPlanes {
+    static GLfloat triangleData[] = {
+// X轴0.5处的平面
+      0.5,  -0.5,    0.5f, 1,  0,  0,
+      0.5,  -0.5f,  -0.5f, 1,  0,  0,
+      0.5,  0.5f,   -0.5f, 1,  0,  0,
+      0.5,  0.5,    -0.5f, 1,  0,  0,
+      0.5,  0.5f,    0.5f, 1,  0,  0,
+      0.5,  -0.5f,   0.5f, 1,  0,  0,
+// X轴-0.5处的平面
+      -0.5,  -0.5,    0.5f, 1,  0,  0,
+      -0.5,  -0.5f,  -0.5f, 1,  0,  0,
+      -0.5,  0.5f,   -0.5f, 1,  0,  0,
+      -0.5,  0.5,    -0.5f, 1,  0,  0,
+      -0.5,  0.5f,    0.5f, 1,  0,  0,
+      -0.5,  -0.5f,   0.5f, 1,  0,  0,
+    };
+    [self bindAttribs:triangleData];
+    glDrawArrays(GL_TRIANGLES, 0, 12);
+}
+
+- (void)drawYPlanes {
+    static GLfloat triangleData[] = {
+        -0.5,  0.5,  0.5f, 0,  1,  0,
+        -0.5f, 0.5, -0.5f, 0,  1,  0,
+        0.5f, 0.5,  -0.5f, 0,  1,  0,
+        0.5,  0.5,  -0.5f, 0,  1,  0,
+        0.5f, 0.5,   0.5f, 0,  1,  0,
+        -0.5f, 0.5,  0.5f, 0,  1,  0,
+         -0.5, -0.5,   0.5f, 0,  1,  0,
+         -0.5f, -0.5, -0.5f, 0,  1,  0,
+         0.5f, -0.5,  -0.5f, 0,  1,  0,
+         0.5,  -0.5,  -0.5f, 0,  1,  0,
+         0.5f, -0.5,   0.5f, 0,  1,  0,
+         -0.5f, -0.5,  0.5f, 0,  1,  0,
+    };
+    [self bindAttribs:triangleData];
+    glDrawArrays(GL_TRIANGLES, 0, 12);
+}
+
+- (void)drawZPlanes {
+    static GLfloat triangleData[] = {
+        -0.5,   0.5f,  0.5,   0,  0,  1,
+        -0.5f,  -0.5f,  0.5,  0,  0,  1,
+        0.5f,   -0.5f,  0.5,  0,  0,  1,
+        0.5,    -0.5f, 0.5,   0,  0,  1,
+        0.5f,  0.5f,  0.5,    0,  0,  1,
+        -0.5f,   0.5f,  0.5,  0,  0,  1,
+        -0.5,   0.5f,  -0.5,   0,  0,  1,
+        -0.5f,  -0.5f,  -0.5,  0,  0,  1,
+        0.5f,   -0.5f,  -0.5,  0,  0,  1,
+        0.5,    -0.5f, -0.5,   0,  0,  1,
+        0.5f,  0.5f,  -0.5,    0,  0,  1,
+        -0.5f,   0.5f,  -0.5,  0,  0,  1,
+    };
+    [self bindAttribs:triangleData];
+    glDrawArrays(GL_TRIANGLES, 0, 12);
 }
 
 @end

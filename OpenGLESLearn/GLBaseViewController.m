@@ -56,6 +56,9 @@
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     view.drawableMultisample = GLKViewDrawableMultisample4X;
     [EAGLContext setCurrentContext:self.context];
+    
+    // 设置OpenGL状态
+    glEnable(GL_DEPTH_TEST);
 }
 
 #pragma mark - Update Delegate
@@ -69,8 +72,8 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     // 清空之前的绘制
-    glClearColor(1, 0.2, 0.2, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.2, 0.2, 0.2, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // 使用fragment.glsl 和 vertex.glsl中的shader
     glUseProgram(self.shaderProgram);
