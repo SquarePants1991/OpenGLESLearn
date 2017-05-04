@@ -78,7 +78,7 @@
     
     glGenRenderbuffers(1, &sampleDepthRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, sampleDepthRenderbuffer);
-    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16, 1024, 1024);
+    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16, textureWidth, textureHeight);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sampleDepthRenderbuffer);
 }
 
