@@ -26,7 +26,7 @@
     // attribute vec4 color;
     GLuint positionAttribLocation = glGetAttribLocation(self.shaderProgram, "position");
     glEnableVertexAttribArray(positionAttribLocation);
-    GLuint colorAttribLocation = glGetAttribLocation(self.shaderProgram, "color");
+    GLuint colorAttribLocation = glGetAttribLocation(self.shaderProgram, "normal");
     glEnableVertexAttribArray(colorAttribLocation);
     
     // 为shader中的position和color赋值
@@ -157,7 +157,7 @@ bool compileShader(GLuint *shader, GLenum type, const GLchar *source) {
     GLint logLength;
     glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
     
-#if Debug
+#if DEBUG
     if (logLength > 0) {
         GLchar *log = (GLchar *)malloc(logLength);
         glGetShaderInfoLog(*shader, logLength, &logLength, log);
@@ -180,7 +180,7 @@ bool linkProgram(GLuint prog) {
     GLint status;
     glLinkProgram(prog);
     
-#if Debug
+#if DEBUG
     GLint logLength;
     glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0) {

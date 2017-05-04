@@ -12,6 +12,7 @@
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
 @property (assign, nonatomic) GLKMatrix4 modelMatrix;
+@property (assign, nonatomic) GLKVector3 lightDirection; // 平行光光照方向
 @end
 
 @implementation ViewController
@@ -27,6 +28,9 @@
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
     
     self.modelMatrix = GLKMatrix4Identity;
+    
+    // 设置平行光方向
+    self.lightDirection = GLKVector3Make(0, -1, 0);
 }
 
 #pragma mark - Update Delegate
@@ -36,7 +40,7 @@
     float varyingFactor = (sin(self.elapsedTime) + 1) / 2.0; // 0 ~ 1
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2 * (varyingFactor + 1), 0, 0, 0, 0, 1, 0);
     
-    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 1, 1, 1);
+    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 1, 1, 0);
     self.modelMatrix = rotateMatrix;
 }
 
@@ -50,6 +54,17 @@
     
     GLuint modelMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "modelMatrix");
     glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix.m);
+    bool canInvert;
+    GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(self.modelMatrix, &canInvert);
+    if (canInvert) {
+        GLuint modelMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "normalMatrix");
+        glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, normalMatrix.m);
+    }
+    
+    
+    GLuint lightDirectionUniformLocation = glGetUniformLocation(self.shaderProgram, "lightDirection");
+    glUniform3fv(lightDirectionUniformLocation, 1,self.lightDirection.v);
+    
     [self drawCube];
 }
 
@@ -84,12 +99,12 @@
       0.5,  0.5f,    0.5f, 1,  0,  0,
       0.5,  -0.5f,   0.5f, 1,  0,  0,
 // X轴-0.5处的平面
-      -0.5,  -0.5,    0.5f, 1,  0,  0,
-      -0.5,  -0.5f,  -0.5f, 1,  0,  0,
-      -0.5,  0.5f,   -0.5f, 1,  0,  0,
-      -0.5,  0.5,    -0.5f, 1,  0,  0,
-      -0.5,  0.5f,    0.5f, 1,  0,  0,
-      -0.5,  -0.5f,   0.5f, 1,  0,  0,
+      -0.5,  -0.5,    0.5f, -1,  0,  0,
+      -0.5,  -0.5f,  -0.5f, -1,  0,  0,
+      -0.5,  0.5f,   -0.5f, -1,  0,  0,
+      -0.5,  0.5,    -0.5f, -1,  0,  0,
+      -0.5,  0.5f,    0.5f, -1,  0,  0,
+      -0.5,  -0.5f,   0.5f, -1,  0,  0,
     };
     [self bindAttribs:triangleData];
     glDrawArrays(GL_TRIANGLES, 0, 12);
@@ -103,12 +118,12 @@
         0.5,  0.5,  -0.5f, 0,  1,  0,
         0.5f, 0.5,   0.5f, 0,  1,  0,
         -0.5f, 0.5,  0.5f, 0,  1,  0,
-         -0.5, -0.5,   0.5f, 0,  1,  0,
-         -0.5f, -0.5, -0.5f, 0,  1,  0,
-         0.5f, -0.5,  -0.5f, 0,  1,  0,
-         0.5,  -0.5,  -0.5f, 0,  1,  0,
-         0.5f, -0.5,   0.5f, 0,  1,  0,
-         -0.5f, -0.5,  0.5f, 0,  1,  0,
+         -0.5, -0.5,   0.5f, 0,  -1,  0,
+         -0.5f, -0.5, -0.5f, 0,  -1,  0,
+         0.5f, -0.5,  -0.5f, 0,  -1,  0,
+         0.5,  -0.5,  -0.5f, 0,  -1,  0,
+         0.5f, -0.5,   0.5f, 0,  -1,  0,
+         -0.5f, -0.5,  0.5f, 0,  -1,  0,
     };
     [self bindAttribs:triangleData];
     glDrawArrays(GL_TRIANGLES, 0, 12);
@@ -122,12 +137,12 @@
         0.5,    -0.5f, 0.5,   0,  0,  1,
         0.5f,  0.5f,  0.5,    0,  0,  1,
         -0.5f,   0.5f,  0.5,  0,  0,  1,
-        -0.5,   0.5f,  -0.5,   0,  0,  1,
-        -0.5f,  -0.5f,  -0.5,  0,  0,  1,
-        0.5f,   -0.5f,  -0.5,  0,  0,  1,
-        0.5,    -0.5f, -0.5,   0,  0,  1,
-        0.5f,  0.5f,  -0.5,    0,  0,  1,
-        -0.5f,   0.5f,  -0.5,  0,  0,  1,
+        -0.5,   0.5f,  -0.5,   0,  0,  -1,
+        -0.5f,  -0.5f,  -0.5,  0,  0,  -1,
+        0.5f,   -0.5f,  -0.5,  0,  0,  -1,
+        0.5,    -0.5f, -0.5,   0,  0,  -1,
+        0.5f,  0.5f,  -0.5,    0,  0,  -1,
+        -0.5f,   0.5f,  -0.5,  0,  0,  -1,
     };
     [self bindAttribs:triangleData];
     glDrawArrays(GL_TRIANGLES, 0, 12);
