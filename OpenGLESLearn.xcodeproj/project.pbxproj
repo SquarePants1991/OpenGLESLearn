@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E25A8BF1EC0494400958F97 /* texture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8E25A8BE1EC0494400958F97 /* texture.jpg */; };
 		8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D0A1EA5E1EB00ADB0A8 /* main.m */; };
 		8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D0D1EA5E1EB00ADB0A8 /* AppDelegate.m */; };
 		8E689D111EA5E1EB00ADB0A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D101EA5E1EB00ADB0A8 /* ViewController.m */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8E25A8BE1EC0494400958F97 /* texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = texture.jpg; sourceTree = "<group>"; };
 		8E689D061EA5E1EB00ADB0A8 /* OpenGLESLearn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLESLearn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E689D0A1EA5E1EB00ADB0A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8E689D0C1EA5E1EB00ADB0A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 		8E689D081EA5E1EB00ADB0A8 /* OpenGLESLearn */ = {
 			isa = PBXGroup;
 			children = (
+				8E25A8BE1EC0494400958F97 /* texture.jpg */,
 				8E689D301EA5E21200ADB0A8 /* fragment.glsl */,
 				8E689D311EA5E21200ADB0A8 /* vertex.glsl */,
 				8EBB9E5C1EADFC4E0095A77B /* GLBaseViewController.h */,
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E689D191EA5E1EB00ADB0A8 /* LaunchScreen.storyboard in Resources */,
+				8E25A8BF1EC0494400958F97 /* texture.jpg in Resources */,
 				8E689D331EA5E21200ADB0A8 /* fragment.glsl in Resources */,
 				8E689D341EA5E21200ADB0A8 /* vertex.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
