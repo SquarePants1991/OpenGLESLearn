@@ -14,7 +14,7 @@
 @property (assign, nonatomic) GLKMatrix4 modelMatrix;
 @property (assign, nonatomic) GLKVector3 lightDirection; // 平行光光照方向
 @property (strong, nonatomic) GLKTextureInfo *diffuseTexture;
-@property (assign, nonatomic) GLuint diffuseTextureWithGLCommands;
+@property (assign, nonatomic) GLKVector3 position;
 @end
 
 @implementation ViewController
@@ -27,13 +27,15 @@
     self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 100.0);
     
     // 设置摄像机在 0，0，2 坐标，看向 0，0，0点。Y轴正向为摄像机顶部指向的方向
-    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+    self.cameraMatrix = GLKMatrix4MakeLookAt(2, 2, 2, 0, 0, 0, 0, 1, 0);
     
     self.modelMatrix = GLKMatrix4Identity;
     
     // 设置平行光方向
     self.lightDirection = GLKVector3Make(1, -1, 0);
 
+    self.position = GLKVector3Make(0, 0, 0);
+    
     [self genTexture];
 }
 
@@ -41,12 +43,17 @@
 
 - (void)update {
     [super update];
-    float varyingFactor = (sin(self.elapsedTime) + 1) / 2.0; // 0 ~ 1
-    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2 * (varyingFactor + 1), 0, 0, 0, 0, 1, 0);
+    self.position = GLKVector3Make(0, 0, -self.elapsedTime * 8
+                                   );
+    if (self.position.z < -5) {
+        self.position = GLKVector3Make(0, 0, 0);
+        self.elapsedTime = 10.0;
+    }
     
-    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 1, 1, 1);
     GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(2,0.2,0.2);
+    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(M_PI / 2, 0, 1, 0);
     self.modelMatrix = GLKMatrix4Multiply(rotateMatrix, scaleMatrix);
+    self.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(self.position.x, self.position.y, self.position.z), self.modelMatrix);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
