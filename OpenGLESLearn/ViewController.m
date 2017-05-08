@@ -35,7 +35,6 @@
     self.lightDirection = GLKVector3Make(1, -1, 0);
 
     [self genTexture];
-    [self genTextureWithGLCommands];
 }
 
 #pragma mark - Update Delegate
@@ -46,7 +45,8 @@
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 0, 2 * (varyingFactor + 1), 0, 0, 0, 0, 1, 0);
     
     GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(varyingFactor * M_PI * 2, 1, 1, 1);
-    self.modelMatrix = rotateMatrix;
+    GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(2,0.2,0.2);
+    self.modelMatrix = GLKMatrix4Multiply(rotateMatrix, scaleMatrix);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
@@ -76,128 +76,41 @@
     glBindTexture(GL_TEXTURE_2D, self.diffuseTexture.name);
     glUniform1i(diffuseMapUniformLocation, 0);
     
-    [self drawCube];
+    [self drawLaser];
 }
 
 #pragma mark - Texture
 - (void)genTexture {
-    NSString *textureFile = [[NSBundle mainBundle] pathForResource:@"texture" ofType:@"jpg"];
+    NSString *textureFile = [[NSBundle mainBundle] pathForResource:@"laser" ofType:@"png"];
     NSError *error;
     self.diffuseTexture = [GLKTextureLoader textureWithContentsOfFile:textureFile options:nil error:&error];
 }
 
-- (void)genTextureWithGLCommands {
-    UIImage *img = [UIImage imageNamed:@"texture.jpg"];
-    // 将图片数据以RGBA的格式导出到textureData中
-    CGImageRef imageRef = [img CGImage];
-    size_t width = CGImageGetWidth(imageRef);
-    size_t height = CGImageGetHeight(imageRef);
-    
-    GLubyte *textureData = (GLubyte *)malloc(width * height * 4);
-    
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    NSUInteger bytesPerPixel = 4;
-    NSUInteger bytesPerRow = bytesPerPixel * width;
-    NSUInteger bitsPerComponent = 8;
-    
-    CGContextRef context = CGBitmapContextCreate(textureData, width, height,
-                                                 bitsPerComponent, bytesPerRow, colorSpace,
-                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    CGColorSpaceRelease(colorSpace);
-    CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
-    CGContextRelease(context);
-    
-    // 生成纹理
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-    self.diffuseTextureWithGLCommands = texture;
-}
-
 #pragma mark - Draw Many Things
-- (void)drawRectangle {
-    static GLfloat triangleData[36] = {
-            -0.5, 0.5f, 0, 1, 0, 0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
-            -0.5f, -0.5f, 0, 0, 1, 0,
-            0.5f, -0.5f, 0, 0, 0, 1,
-            0.5, -0.5f, 0, 0, 0, 1,
-            0.5f, 0.5f, 0, 0, 1, 0,
-            -0.5f, 0.5f, 0, 1, 0, 0,
+- (void)drawLaser {
+    glDisable(GL_DEPTH_TEST);
+    static GLfloat plane1[] = {
+        -0.5, 0.5f, 0, 1, 0, 0,     1, 0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
+        -0.5f, -0.5f, 0, 0, 1, 0,   0, 0,
+        0.5f, -0.5f, 0, 0, 0, 1,    0, 1,
+        0.5, -0.5f, 0, 0, 0, 1,     0, 1,
+        0.5f, 0.5f, 0, 0, 1, 0,     1, 1,
+        -0.5f, 0.5f, 0, 1, 0, 0,    1, 0,
     };
-    [self bindAttribs:triangleData];
+    [self bindAttribs:plane1];
     glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
-- (void)drawCube {
-    [self drawXPlanes];
-    [self drawYPlanes];
-    [self drawZPlanes];
-}
-
-- (void)drawXPlanes {
-    static GLfloat triangleData[] = {
-// X轴0.5处的平面
-      0.5,  -0.5,    0.5f, 1,  0,  0, 0, 0,
-      0.5,  -0.5f,  -0.5f, 1,  0,  0, 0, 1,
-      0.5,  0.5f,   -0.5f, 1,  0,  0, 1, 1,
-      0.5,  0.5,    -0.5f, 1,  0,  0, 1, 1,
-      0.5,  0.5f,    0.5f, 1,  0,  0, 1, 0,
-      0.5,  -0.5f,   0.5f, 1,  0,  0, 0, 0,
-// X轴-0.5处的平面
-      -0.5,  -0.5,    0.5f, -1,  0,  0, 0, 0,
-      -0.5,  -0.5f,  -0.5f, -1,  0,  0, 0, 1,
-      -0.5,  0.5f,   -0.5f, -1,  0,  0, 1, 1,
-      -0.5,  0.5,    -0.5f, -1,  0,  0, 1, 1,
-      -0.5,  0.5f,    0.5f, -1,  0,  0, 1, 0,
-      -0.5,  -0.5f,   0.5f, -1,  0,  0, 0, 0,
+    
+    static GLfloat plane2[] = {
+        -0.5,0, 0.5f,  1, 0, 0,     1, 0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
+        -0.5f,0, -0.5f,  0, 1, 0,   0, 0,
+        0.5f, 0, -0.5f, 0, 0, 1,    0, 1,
+        0.5,0, -0.5f,  0, 0, 1,     0, 1,
+        0.5f, 0, 0.5f, 0, 1, 0,     1, 1,
+        -0.5f, 0,0.5f,  1, 0, 0,    1, 0,
     };
-    [self bindAttribs:triangleData];
-    glDrawArrays(GL_TRIANGLES, 0, 12);
-}
-
-- (void)drawYPlanes {
-    static GLfloat triangleData[] = {
-        -0.5,  0.5,  0.5f, 0,  1,  0, 0, 0,
-        -0.5f, 0.5, -0.5f, 0,  1,  0, 0, 1,
-        0.5f, 0.5,  -0.5f, 0,  1,  0, 1, 1,
-        0.5,  0.5,  -0.5f, 0,  1,  0, 1, 1,
-        0.5f, 0.5,   0.5f, 0,  1,  0, 1, 0,
-        -0.5f, 0.5,  0.5f, 0,  1,  0, 0, 0,
-         -0.5, -0.5,   0.5f, 0,  -1,  0, 0, 0,
-         -0.5f, -0.5, -0.5f, 0,  -1,  0, 0, 1,
-         0.5f, -0.5,  -0.5f, 0,  -1,  0, 1, 1,
-         0.5,  -0.5,  -0.5f, 0,  -1,  0, 1, 1,
-         0.5f, -0.5,   0.5f, 0,  -1,  0, 1, 0,
-         -0.5f, -0.5,  0.5f, 0,  -1,  0, 0, 0,
-    };
-    [self bindAttribs:triangleData];
-    glDrawArrays(GL_TRIANGLES, 0, 12);
-}
-
-- (void)drawZPlanes {
-    static GLfloat triangleData[] = {
-        -0.5,   0.5f,  0.5,   0,  0,  1, 0, 0,
-        -0.5f,  -0.5f,  0.5,  0,  0,  1, 0, 1,
-        0.5f,   -0.5f,  0.5,  0,  0,  1, 1, 1,
-        0.5,    -0.5f, 0.5,   0,  0,  1, 1, 1,
-        0.5f,  0.5f,  0.5,    0,  0,  1, 1, 0,
-        -0.5f,   0.5f,  0.5,  0,  0,  1, 0, 0,
-        -0.5,   0.5f,  -0.5,   0,  0,  -1, 0, 0,
-        -0.5f,  -0.5f,  -0.5,  0,  0,  -1, 0, 1,
-        0.5f,   -0.5f,  -0.5,  0,  0,  -1, 1, 1,
-        0.5,    -0.5f, -0.5,   0,  0,  -1, 1, 1,
-        0.5f,  0.5f,  -0.5,    0,  0,  -1, 1, 0,
-        -0.5f,   0.5f,  -0.5,  0,  0,  -1, 0, 0,
-    };
-    [self bindAttribs:triangleData];
-    glDrawArrays(GL_TRIANGLES, 0, 12);
+    [self bindAttribs:plane2];
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glEnable(GL_DEPTH_TEST);
 }
 
 @end
