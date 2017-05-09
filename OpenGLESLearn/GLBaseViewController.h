@@ -8,8 +8,9 @@
 
 #import <GLKit/GLKit.h>
 
+@class GLContext;
 @interface GLBaseViewController : GLKViewController
-@property (assign, nonatomic) GLuint shaderProgram;
+@property (strong, nonatomic) GLContext * glContext;
 @property (assign, nonatomic) GLfloat elapsedTime;
 
 - (void)update;

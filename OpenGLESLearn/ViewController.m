@@ -7,14 +7,16 @@
 //
 
 #import "ViewController.h"
+#import "GLContext.h"
+#import "Laser.h"
 
 @interface ViewController ()
+@property (strong, nonatomic) GLContext *laserContext;
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
-@property (assign, nonatomic) GLKMatrix4 modelMatrix;
 @property (assign, nonatomic) GLKVector3 lightDirection; // 平行光光照方向
-@property (strong, nonatomic) GLKTextureInfo *diffuseTexture;
-@property (assign, nonatomic) GLKVector3 position;
+
+@property (strong, nonatomic) NSMutableArray<Laser *> * lasers;
 @end
 
 @implementation ViewController
@@ -25,98 +27,77 @@
     // 使用透视投影矩阵
     float aspect = self.view.frame.size.width / self.view.frame.size.height;
     self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 100.0);
-    
-    // 设置摄像机在 0，0，2 坐标，看向 0，0，0点。Y轴正向为摄像机顶部指向的方向
-    self.cameraMatrix = GLKMatrix4MakeLookAt(0.6, -0.8, 2, 0, 0, 0, 0, 1, 0);
-    
-    self.modelMatrix = GLKMatrix4Identity;
-    
+
+    self.cameraMatrix = GLKMatrix4MakeLookAt(1.5, -1, 0, 0, 0, -10, 0, 1, 0);
+
     // 设置平行光方向
     self.lightDirection = GLKVector3Make(1, -1, 0);
 
-    self.position = GLKVector3Make(0, 0, -10);
-    
-    [self genTexture];
+
+    self.lasers = [NSMutableArray new];
+    [self prepareLasers];
+    [self prepareLaserGLContext];
+}
+
+- (void)prepareLasers {
+    Laser *laser = [[Laser alloc] initWithLaserImage:[UIImage imageNamed:@"laser.png"]];
+    laser.position = GLKVector3Make(0, 0, -40);
+    laser.direction = GLKVector3Make(0.08, 0.08, 1);
+    laser.length = 60;
+    laser.radius = 1;
+    [self.lasers addObject:laser];
+
+    laser = [[Laser alloc] initWithLaserImage:[UIImage imageNamed:@"laser.png"]];
+    laser.position = GLKVector3Make(0, 0, -40);
+    laser.direction = GLKVector3Make(-0.08, -0.08, 1);
+    laser.length = 60;
+    laser.radius = 1;
+    [self.lasers addObject:laser];
+
+    laser = [[Laser alloc] initWithLaserImage:[UIImage imageNamed:@"laser.png"]];
+    laser.position = GLKVector3Make(0, 0, -40);
+    laser.direction = GLKVector3Make(-0.08, -0.08, 1);
+    laser.length = 60;
+    laser.radius = 1;
+    [self.lasers addObject:laser];
+
+    laser = [[Laser alloc] initWithLaserImage:[UIImage imageNamed:@"laser.png"]];
+    laser.position = GLKVector3Make(0, 0, -40);
+    laser.direction = GLKVector3Make(-0.08, -0.08, 1);
+    laser.length = 60;
+    laser.radius = 1;
+    [self.lasers addObject:laser];
+}
+
+- (void)prepareLaserGLContext {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frg_laser" ofType:@".glsl"];
+    self.laserContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
 }
 
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    self.position = GLKVector3Make(0, 0,self.position.z + self.timeSinceLastUpdate * 8
-                                   );
-    if (self.position.z > 4) {
-        self.position = GLKVector3Make(0, 0, -28);
-    }
-    
-    GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(4,0.4,0.4);
-    GLKMatrix4 rotateMatrix = GLKMatrix4MakeRotation(M_PI / 2, 0, 1, 0);
-    self.modelMatrix = GLKMatrix4Multiply(rotateMatrix, scaleMatrix);
-    self.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(self.position.x, self.position.y, self.position.z), self.modelMatrix);
+    [self.lasers enumerateObjectsUsingBlock:^(Laser *obj, NSUInteger idx, BOOL *stop) {
+        [obj update:self.timeSinceLastUpdate];
+    }];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     [super glkView:view drawInRect:rect];
-  
-    GLuint projectionMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "projectionMatrix");
-    glUniformMatrix4fv(projectionMatrixUniformLocation, 1, 0, self.projectionMatrix.m);
-    GLuint cameraMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "cameraMatrix");
-    glUniformMatrix4fv(cameraMatrixUniformLocation, 1, 0, self.cameraMatrix.m);
-    
-    GLuint modelMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "modelMatrix");
-    glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, self.modelMatrix.m);
-    bool canInvert;
-    GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(self.modelMatrix, &canInvert);
-    if (canInvert) {
-        GLuint modelMatrixUniformLocation = glGetUniformLocation(self.shaderProgram, "normalMatrix");
-        glUniformMatrix4fv(modelMatrixUniformLocation, 1, 0, normalMatrix.m);
-    }
-    
-    
-    GLuint lightDirectionUniformLocation = glGetUniformLocation(self.shaderProgram, "lightDirection");
-    glUniform3fv(lightDirectionUniformLocation, 1,self.lightDirection.v);
 
-    // 绑定纹理
-    GLuint diffuseMapUniformLocation = glGetUniformLocation(self.shaderProgram, "diffuseMap");
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, self.diffuseTexture.name);
-    glUniform1i(diffuseMapUniformLocation, 0);
-    
-    [self drawLaser];
-}
+    [self.laserContext active];
+    [self.laserContext setUniform1f:@"elapsedTime" value:(GLfloat)self.elapsedTime];
+    [self.laserContext setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
+    [self.laserContext setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
 
-#pragma mark - Texture
-- (void)genTexture {
-    NSString *textureFile = [[NSBundle mainBundle] pathForResource:@"laser5" ofType:@"png"];
-    NSError *error;
-    self.diffuseTexture = [GLKTextureLoader textureWithContentsOfFile:textureFile options:nil error:&error];
-}
+    [self.laserContext setUniform3fv:@"lightDirection" value:self.lightDirection];
 
-#pragma mark - Draw Many Things
-- (void)drawLaser {
-    glDisable(GL_DEPTH_TEST);
-    static GLfloat plane1[] = {
-        -0.5, 0.5f, 0, 1, 0, 0,     1, 0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
-        -0.5f, -0.5f, 0, 0, 1, 0,   0, 0,
-        0.5f, -0.5f, 0, 0, 0, 1,    0, 1,
-        0.5, -0.5f, 0, 0, 0, 1,     0, 1,
-        0.5f, 0.5f, 0, 0, 1, 0,     1, 1,
-        -0.5f, 0.5f, 0, 1, 0, 0,    1, 0,
-    };
-    [self bindAttribs:plane1];
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    
-    static GLfloat plane2[] = {
-        -0.5,0, 0.5f,  1, 0, 0,     1, 0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
-        -0.5f,0, -0.5f,  0, 1, 0,   0, 0,
-        0.5f, 0, -0.5f, 0, 0, 1,    0, 1,
-        0.5,0, -0.5f,  0, 0, 1,     0, 1,
-        0.5f, 0, 0.5f, 0, 1, 0,     1, 1,
-        -0.5f, 0,0.5f,  1, 0, 0,    1, 0,
-    };
-    [self bindAttribs:plane2];
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glEnable(GL_DEPTH_TEST);
+    [self.lasers enumerateObjectsUsingBlock:^(Laser *obj, NSUInteger idx, BOOL *stop) {
+        [obj draw:self.laserContext];
+    }];
+
 }
 
 @end
