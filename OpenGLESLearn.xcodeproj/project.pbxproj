@@ -17,6 +17,8 @@
 		8E689D241EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */; };
 		8E689D331EA5E21200ADB0A8 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D301EA5E21200ADB0A8 /* fragment.glsl */; };
 		8E689D341EA5E21200ADB0A8 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D311EA5E21200ADB0A8 /* vertex.glsl */; };
+		8E824B141EC31999009AC27F /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E824B121EC31999009AC27F /* green.png */; };
+		8E824B151EC31999009AC27F /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E824B131EC31999009AC27F /* red.png */; };
 		8EBB9E5E1EADFC4E0095A77B /* GLBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EBB9E5D1EADFC4E0095A77B /* GLBaseViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		8E689D251EA5E1EB00ADB0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E689D301EA5E21200ADB0A8 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		8E689D311EA5E21200ADB0A8 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
+		8E824B121EC31999009AC27F /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green.png; sourceTree = "<group>"; };
+		8E824B131EC31999009AC27F /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red.png; sourceTree = "<group>"; };
 		8EBB9E5C1EADFC4E0095A77B /* GLBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBaseViewController.h; sourceTree = "<group>"; };
 		8EBB9E5D1EADFC4E0095A77B /* GLBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLBaseViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,6 +94,8 @@
 		8E689D081EA5E1EB00ADB0A8 /* OpenGLESLearn */ = {
 			isa = PBXGroup;
 			children = (
+				8E824B121EC31999009AC27F /* green.png */,
+				8E824B131EC31999009AC27F /* red.png */,
 				8E25A8BE1EC0494400958F97 /* texture.jpg */,
 				8E689D301EA5E21200ADB0A8 /* fragment.glsl */,
 				8E689D311EA5E21200ADB0A8 /* vertex.glsl */,
@@ -214,7 +220,9 @@
 				8E689D331EA5E21200ADB0A8 /* fragment.glsl in Resources */,
 				8E689D341EA5E21200ADB0A8 /* vertex.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
+				8E824B151EC31999009AC27F /* red.png in Resources */,
 				8E689D141EA5E1EB00ADB0A8 /* Main.storyboard in Resources */,
+				8E824B141EC31999009AC27F /* green.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
