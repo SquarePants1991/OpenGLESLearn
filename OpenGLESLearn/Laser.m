@@ -72,7 +72,7 @@
 }
 
 - (void)drawLaser:(GLContext *)glContext{
-    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
 
     static GLfloat plane1[] = {
         -0.5, 0.5f, 0, 1, 0, 0,     1, 0, // x, y, z, r, g, b,每一行存储一个点的信息，位置和颜色
@@ -94,7 +94,7 @@
     };
     [glContext drawTriangles:plane2 vertexCount:6];
 
-    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
 }
 
 #pragma mark - Texture

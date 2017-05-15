@@ -4,7 +4,6 @@ varying vec2 fragUV;
 
 uniform sampler2D diffuseMap;
 uniform float life; // max: 1, min: 0
-uniform float elapsedTime;
 uniform float hue;
 
 #define Max(a, b) (a > b ? a : b)
@@ -59,5 +58,5 @@ void main(void) {
     vec3 hsl = rgbToHsl(materialColor.x, materialColor.y, materialColor.z);
     hsl.x = hue;
     vec3 rgb = hslToRgb(hsl.x, hsl.y, hsl.z);
-    gl_FragColor = vec4(rgb, 1.0) * life;
+    gl_FragColor = vec4(rgb, materialColor.a * life);
 }
