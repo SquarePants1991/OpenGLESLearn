@@ -11,13 +11,12 @@
 
 @interface Laser ()
 @property (strong, nonatomic) GLKTextureInfo *diffuseTexture;
-@property (assign, nonatomic) GLKMatrix4 modelMatrix;
 @property (assign, nonatomic) float hue;
 @end
 
 @implementation Laser
-- (id)initWithLaserImage:(UIImage *)image {
-    self = [super init];
+- (id)initWithLaserImage:(UIImage *)image context:(GLContext *)context {
+    self = [super initWithGLContext:context];
     if (self) {
         [self genTexture:image];
         self.direction = GLKVector3Normalize(GLKVector3Make(0, 0, 1));

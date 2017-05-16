@@ -39,8 +39,6 @@
     
     // 设置OpenGL状态
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_DST_ALPHA);
 }
 
 - (void)setupGLContext {
