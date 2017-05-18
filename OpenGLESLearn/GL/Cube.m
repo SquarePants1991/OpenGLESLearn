@@ -105,9 +105,7 @@
     GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(self.modelMatrix, &canInvert);
     [glContext setUniformMatrix4fv:@"normalMatrix" value:canInvert ? normalMatrix : GLKMatrix4Identity];
     [glContext bindTexture:self.diffuseTexture to:GL_TEXTURE0 uniformName:@"diffuseMap"];
-    
-    [glContext drawTriangles:[self cubeData] vertexCount:36];
-//    [glContext drawTrianglesWithVAO:vao vertexCount:36];
+    [glContext drawTrianglesWithVAO:vao vertexCount:36];
 }
 
 #pragma mark - Texture

@@ -39,7 +39,7 @@
 
 - (void)createCubes {
     for (int j = -4; j <= 4; ++j) {
-        for (int i = -10; i <= 10; ++i) {
+        for (int i = -4; i <= 4; ++i) {
             Cube * cube = [[Cube alloc] initWithGLContext:self.glContext];
             cube.modelMatrix = GLKMatrix4MakeTranslation(j * 2, 0, i * 2);
             [self.objects addObject:cube];
