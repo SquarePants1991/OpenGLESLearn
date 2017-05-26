@@ -1,3 +1,7 @@
 
 *.xcuserstate
 .idea/
+
+OpenGLESLearn/.DS_Store
+
+OpenGLESLearn.xcodeproj/xcuserdata/ocean.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
