@@ -9,6 +9,7 @@
 #import <GLKit/GLKit.h>
 #import <OpenGLES/ES2/glext.h>
 
+@class GLGeometry;
 @interface GLContext : NSObject
 @property (assign, nonatomic) GLuint program;
 + (id)contextWithVertexShaderPath:(NSString *)vertexShaderPath fragmentShaderPath:(NSString *)fragmentShaderPath;
@@ -21,6 +22,7 @@
 - (void)drawTriangles:(GLfloat *)triangleData vertexCount:(GLint)vertexCount;
 - (void)drawTrianglesWithVBO:(GLuint)vbo vertexCount:(GLint)vertexCount;
 - (void)drawTrianglesWithVAO:(GLuint)vao vertexCount:(GLint)vertexCount;
+- (void)drawGeometry:(GLGeometry *)geometry;
 
 /// uniform setters
 - (void)setUniform1i:(NSString *)uniformName value:(GLint)value;

@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "GLContext.h"
 #import "Cube.h"
+#import "Cylinder.h"
 
 @interface ViewController ()
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
@@ -27,14 +28,14 @@
     float aspect = self.view.frame.size.width / self.view.frame.size.height;
     self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 1000.0);
 
-    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 3, 0, 0, 0, 0, 1, 0);
+    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 6.5, 0, 0, 0, 0, 1, 0);
 
     // 设置平行光方向
     self.lightDirection = GLKVector3Make(1, -1, 0);
 
 
     self.objects = [NSMutableArray new];
-    [self createCubes];
+    [self createCylinder];
 }
 
 - (void)createCubes {
@@ -47,11 +48,29 @@
     }
 }
 
+- (void)createCylinder {
+    GLKTextureInfo *metal1 = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"metal_01.png"].CGImage options:nil error:nil];
+    GLKTextureInfo *metal2 = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"metal_02.jpg"].CGImage options:nil error:nil];
+    GLKTextureInfo *metal3 = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"metal_03.png"].CGImage options:nil error:nil];
+    // 四边的圆柱体就是一个四方体
+    Cylinder * cylinder = [[Cylinder alloc] initWithGLContext:self.glContext sides:4 radius:0.9 height:1.2 texture:metal1];
+    cylinder.modelMatrix = GLKMatrix4MakeTranslation(0, 2, 0);
+    [self.objects addObject:cylinder];
+    
+    Cylinder * cylinder2 = [[Cylinder alloc] initWithGLContext:self.glContext sides:16 radius:0.2 height:4.0 texture:metal3];
+    [self.objects addObject:cylinder2];
+    
+    // 四边的圆柱体就是一个正方体
+    Cylinder * cylinder3 = [[Cylinder alloc] initWithGLContext:self.glContext sides:4 radius:0.41 height:0.3 texture:metal2];
+    cylinder3.modelMatrix = GLKMatrix4MakeTranslation(0, -2, 0);
+    [self.objects addObject:cylinder3];
+}
+
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    GLKVector3 eyePosition = GLKVector3Make(2 * sin(self.elapsedTime), 2, 2 * cos(self.elapsedTime));
+    GLKVector3 eyePosition = GLKVector3Make(4 * sin(self.elapsedTime), 4 * sin(self.elapsedTime), 4 * cos(self.elapsedTime));
     self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, 0, 0, 0, 0, 1, 0);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj update:self.timeSinceLastUpdate];

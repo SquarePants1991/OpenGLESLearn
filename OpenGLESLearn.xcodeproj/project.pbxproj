@@ -7,12 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E4D43401EE6AE87007AC649 /* metal_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E4D433E1EE6AE33007AC649 /* metal_03.png */; };
+		8E4D43421EE6AE89007AC649 /* metal_01.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E4D433F1EE6AE33007AC649 /* metal_01.png */; };
+		8E4D43441EE6AF02007AC649 /* metal_02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8E4D43431EE6AEF7007AC649 /* metal_02.jpg */; };
 		8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D0A1EA5E1EB00ADB0A8 /* main.m */; };
 		8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D0D1EA5E1EB00ADB0A8 /* AppDelegate.m */; };
 		8E689D141EA5E1EB00ADB0A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D121EA5E1EB00ADB0A8 /* Main.storyboard */; };
 		8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D151EA5E1EB00ADB0A8 /* Assets.xcassets */; };
 		8E689D191EA5E1EB00ADB0A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D171EA5E1EB00ADB0A8 /* LaunchScreen.storyboard */; };
 		8E689D241EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */; };
+		8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */; };
+		8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
 		D3F284201ECB2BE2009783FC /* GLObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284151ECB2BE2009783FC /* GLObject.m */; };
@@ -37,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8E4D433E1EE6AE33007AC649 /* metal_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = metal_03.png; sourceTree = "<group>"; };
+		8E4D433F1EE6AE33007AC649 /* metal_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = metal_01.png; sourceTree = "<group>"; };
+		8E4D43431EE6AEF7007AC649 /* metal_02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metal_02.jpg; sourceTree = "<group>"; };
 		8E689D061EA5E1EB00ADB0A8 /* OpenGLESLearn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLESLearn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E689D0A1EA5E1EB00ADB0A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8E689D0C1EA5E1EB00ADB0A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -48,6 +56,10 @@
 		8E689D1F1EA5E1EB00ADB0A8 /* OpenGLESLearnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenGLESLearnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLESLearnTests.m; sourceTree = "<group>"; };
 		8E689D251EA5E1EB00ADB0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8EF0AEF01EE644E5003A4EF9 /* Cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
+		8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
+		8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGeometry.h; sourceTree = "<group>"; };
+		8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLGeometry.m; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
 		D3F284121ECB2BE2009783FC /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
@@ -148,6 +160,10 @@
 				D3F284151ECB2BE2009783FC /* GLObject.m */,
 				D3F284161ECB2BE2009783FC /* Laser.h */,
 				D3F284171ECB2BE2009783FC /* Laser.m */,
+				8EF0AEF01EE644E5003A4EF9 /* Cylinder.h */,
+				8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */,
+				8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */,
+				8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -155,6 +171,9 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8E4D43431EE6AEF7007AC649 /* metal_02.jpg */,
+				8E4D433F1EE6AE33007AC649 /* metal_01.png */,
+				8E4D433E1EE6AE33007AC649 /* metal_03.png */,
 				D3F284191ECB2BE2009783FC /* fragment.glsl */,
 				D3F2841A1ECB2BE2009783FC /* frg_laser.glsl */,
 				D3F2841B1ECB2BE2009783FC /* laser.png */,
@@ -262,8 +281,11 @@
 				8E689D191EA5E1EB00ADB0A8 /* LaunchScreen.storyboard in Resources */,
 				D3F284261ECB2BE2009783FC /* vertex.glsl in Resources */,
 				D3F284251ECB2BE2009783FC /* texture.jpg in Resources */,
+				8E4D43421EE6AE89007AC649 /* metal_01.png in Resources */,
 				D3F284221ECB2BE2009783FC /* fragment.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
+				8E4D43401EE6AE87007AC649 /* metal_03.png in Resources */,
+				8E4D43441EE6AF02007AC649 /* metal_02.jpg in Resources */,
 				D3F284231ECB2BE2009783FC /* frg_laser.glsl in Resources */,
 				8E689D141EA5E1EB00ADB0A8 /* Main.storyboard in Resources */,
 				D3F284241ECB2BE2009783FC /* laser.png in Resources */,
@@ -290,7 +312,9 @@
 				D3F284201ECB2BE2009783FC /* GLObject.m in Sources */,
 				D3F2842C1ECB2C46009783FC /* GLBaseViewController.m in Sources */,
 				D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */,
+				8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */,
 				8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */,
+				8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
