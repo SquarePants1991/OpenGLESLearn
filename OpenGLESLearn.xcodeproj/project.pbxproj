@@ -16,8 +16,13 @@
 		8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D151EA5E1EB00ADB0A8 /* Assets.xcassets */; };
 		8E689D191EA5E1EB00ADB0A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E689D171EA5E1EB00ADB0A8 /* LaunchScreen.storyboard */; };
 		8E689D241EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */; };
+		8E7569381EE9398A004CC68F /* frag_terrain.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 8E7569371EE9398A004CC68F /* frag_terrain.glsl */; };
+		8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8E75693A1EE93A3A004CC68F /* dirt_01.jpg */; };
+		8E75693C1EE93A3E004CC68F /* grass_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8E7569391EE93A3A004CC68F /* grass_01.jpg */; };
+		8EE3673E1EE8FABD005A8D86 /* Terrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3673D1EE8FABD005A8D86 /* Terrain.m */; };
 		8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */; };
 		8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */; };
+		8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
 		D3F284201ECB2BE2009783FC /* GLObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284151ECB2BE2009783FC /* GLObject.m */; };
@@ -56,6 +61,12 @@
 		8E689D1F1EA5E1EB00ADB0A8 /* OpenGLESLearnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenGLESLearnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E689D231EA5E1EB00ADB0A8 /* OpenGLESLearnTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLESLearnTests.m; sourceTree = "<group>"; };
 		8E689D251EA5E1EB00ADB0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E7569371EE9398A004CC68F /* frag_terrain.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_terrain.glsl; sourceTree = "<group>"; };
+		8E7569391EE93A3A004CC68F /* grass_01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = grass_01.jpg; sourceTree = "<group>"; };
+		8E75693A1EE93A3A004CC68F /* dirt_01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dirt_01.jpg; sourceTree = "<group>"; };
+		8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = terrain_01.jpg; sourceTree = "<group>"; };
+		8EE3673C1EE8FABD005A8D86 /* Terrain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Terrain.h; sourceTree = "<group>"; };
+		8EE3673D1EE8FABD005A8D86 /* Terrain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Terrain.m; sourceTree = "<group>"; };
 		8EF0AEF01EE644E5003A4EF9 /* Cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
 		8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 		8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGeometry.h; sourceTree = "<group>"; };
@@ -164,6 +175,8 @@
 				8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */,
 				8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */,
 				8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */,
+				8EE3673C1EE8FABD005A8D86 /* Terrain.h */,
+				8EE3673D1EE8FABD005A8D86 /* Terrain.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -171,6 +184,9 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8E75693A1EE93A3A004CC68F /* dirt_01.jpg */,
+				8E7569391EE93A3A004CC68F /* grass_01.jpg */,
+				8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */,
 				8E4D43431EE6AEF7007AC649 /* metal_02.jpg */,
 				8E4D433F1EE6AE33007AC649 /* metal_01.png */,
 				8E4D433E1EE6AE33007AC649 /* metal_03.png */,
@@ -179,6 +195,7 @@
 				D3F2841B1ECB2BE2009783FC /* laser.png */,
 				D3F2841C1ECB2BE2009783FC /* texture.jpg */,
 				D3F2841D1ECB2BE2009783FC /* vertex.glsl */,
+				8E7569371EE9398A004CC68F /* frag_terrain.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -285,7 +302,11 @@
 				D3F284221ECB2BE2009783FC /* fragment.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
 				8E4D43401EE6AE87007AC649 /* metal_03.png in Resources */,
+				8E75693C1EE93A3E004CC68F /* grass_01.jpg in Resources */,
+				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
+				8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */,
 				8E4D43441EE6AF02007AC649 /* metal_02.jpg in Resources */,
+				8E7569381EE9398A004CC68F /* frag_terrain.glsl in Resources */,
 				D3F284231ECB2BE2009783FC /* frg_laser.glsl in Resources */,
 				8E689D141EA5E1EB00ADB0A8 /* Main.storyboard in Resources */,
 				D3F284241ECB2BE2009783FC /* laser.png in Resources */,
@@ -316,6 +337,7 @@
 				8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */,
 				8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
+				8EE3673E1EE8FABD005A8D86 /* Terrain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

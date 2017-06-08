@@ -10,6 +10,7 @@
 #import "GLContext.h"
 #import "Cube.h"
 #import "Cylinder.h"
+#import "Terrain.h"
 
 @interface ViewController ()
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
@@ -35,7 +36,7 @@
 
 
     self.objects = [NSMutableArray new];
-    [self createCylinder];
+    [self createTerrain];
 }
 
 - (void)createCubes {
@@ -66,12 +67,36 @@
     [self.objects addObject:cylinder3];
 }
 
+- (void)createTerrain {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_terrain" ofType:@".glsl"];
+    GLContext *terrainContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    
+    GLKTextureInfo *grass = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"grass_01.jpg"].CGImage options:nil error:nil];
+    NSError *error;
+    GLKTextureInfo *dirt = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"dirt_01.jpg"].CGImage options:nil error:&error];
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, grass.name);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glBindTexture(GL_TEXTURE_2D, dirt.name);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    
+    UIImage *heightMap = [UIImage imageNamed:@"terrain_01.jpg"];
+    Terrain *terrain = [[Terrain alloc] initWithGLContext:terrainContext heightMap:heightMap size:CGSizeMake(500, 500) height:100 grass:grass dirt:dirt];
+    terrain.modelMatrix = GLKMatrix4MakeTranslation(-250, 0, -250);
+    [self.objects addObject:terrain];
+}
+
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    GLKVector3 eyePosition = GLKVector3Make(4 * sin(self.elapsedTime), 4 * sin(self.elapsedTime), 4 * cos(self.elapsedTime));
-    self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, 0, 0, 0, 0, 1, 0);
+    GLKVector3 eyePosition = GLKVector3Make(500 * sin(self.elapsedTime / 2.0), sin(self.elapsedTime) * 50 + 250, 500 * cos(self.elapsedTime / 2.0));
+    GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
+    self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj update:self.timeSinceLastUpdate];
     }];
