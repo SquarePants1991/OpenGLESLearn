@@ -12,6 +12,7 @@
 @interface GLBaseViewController : GLKViewController
 @property (strong, nonatomic) GLContext * glContext;
 @property (assign, nonatomic) GLfloat elapsedTime;
+@property (strong, nonatomic) EAGLContext *context;
 
 - (void)update;
 - (void)bindAttribs:(GLfloat *)triangleData;

@@ -10,7 +10,6 @@
 #import "GLContext.h"
 
 @interface GLBaseViewController ()
-@property (strong, nonatomic) EAGLContext *context;
 @end
 
 @implementation GLBaseViewController

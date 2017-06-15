@@ -23,6 +23,10 @@
 		8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */; };
 		8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */; };
 		8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */; };
+		D30166AA1EF28EB80070ED78 /* VideoPlane.m in Sources */ = {isa = PBXBuildFile; fileRef = D30166A91EF28E760070ED78 /* VideoPlane.m */; };
+		D39C00CB1EF26E500081235D /* ARGLBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C00CA1EF26E500081235D /* ARGLBaseViewController.m */; };
+		D39C00CE1EF26F260081235D /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C00CD1EF26F260081235D /* ARViewController.m */; };
+		D39C00D01EF26FC00081235D /* frag_video.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D39C00CF1EF26FC00081235D /* frag_video.glsl */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
 		D3F284201ECB2BE2009783FC /* GLObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284151ECB2BE2009783FC /* GLObject.m */; };
@@ -71,6 +75,13 @@
 		8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 		8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGeometry.h; sourceTree = "<group>"; };
 		8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLGeometry.m; sourceTree = "<group>"; };
+		D30166A91EF28E760070ED78 /* VideoPlane.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoPlane.m; sourceTree = "<group>"; };
+		D39C00C91EF26E500081235D /* ARGLBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGLBaseViewController.h; sourceTree = "<group>"; };
+		D39C00CA1EF26E500081235D /* ARGLBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARGLBaseViewController.m; sourceTree = "<group>"; };
+		D39C00CC1EF26F260081235D /* ARViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARViewController.h; sourceTree = "<group>"; };
+		D39C00CD1EF26F260081235D /* ARViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARViewController.m; sourceTree = "<group>"; };
+		D39C00CF1EF26FC00081235D /* frag_video.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_video.glsl; sourceTree = "<group>"; };
+		D39C00D11EF270060081235D /* VideoPlane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPlane.h; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
 		D3F284121ECB2BE2009783FC /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
@@ -177,6 +188,8 @@
 				8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */,
 				8EE3673C1EE8FABD005A8D86 /* Terrain.h */,
 				8EE3673D1EE8FABD005A8D86 /* Terrain.m */,
+				D39C00D11EF270060081235D /* VideoPlane.h */,
+				D30166A91EF28E760070ED78 /* VideoPlane.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -196,6 +209,7 @@
 				D3F2841C1ECB2BE2009783FC /* texture.jpg */,
 				D3F2841D1ECB2BE2009783FC /* vertex.glsl */,
 				8E7569371EE9398A004CC68F /* frag_terrain.glsl */,
+				D39C00CF1EF26FC00081235D /* frag_video.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -207,6 +221,10 @@
 				D3F284291ECB2C46009783FC /* GLBaseViewController.m */,
 				D3F2842A1ECB2C46009783FC /* ViewController.h */,
 				D3F2842B1ECB2C46009783FC /* ViewController.m */,
+				D39C00C91EF26E500081235D /* ARGLBaseViewController.h */,
+				D39C00CA1EF26E500081235D /* ARGLBaseViewController.m */,
+				D39C00CC1EF26F260081235D /* ARViewController.h */,
+				D39C00CD1EF26F260081235D /* ARViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -300,6 +318,7 @@
 				D3F284251ECB2BE2009783FC /* texture.jpg in Resources */,
 				8E4D43421EE6AE89007AC649 /* metal_01.png in Resources */,
 				D3F284221ECB2BE2009783FC /* fragment.glsl in Resources */,
+				D39C00D01EF26FC00081235D /* frag_video.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
 				8E4D43401EE6AE87007AC649 /* metal_03.png in Resources */,
 				8E75693C1EE93A3E004CC68F /* grass_01.jpg in Resources */,
@@ -329,11 +348,14 @@
 			files = (
 				D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */,
 				D3F284211ECB2BE2009783FC /* Laser.m in Sources */,
+				D39C00CE1EF26F260081235D /* ARViewController.m in Sources */,
 				D3F2842D1ECB2C46009783FC /* ViewController.m in Sources */,
 				D3F284201ECB2BE2009783FC /* GLObject.m in Sources */,
 				D3F2842C1ECB2C46009783FC /* GLBaseViewController.m in Sources */,
 				D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */,
 				8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */,
+				D39C00CB1EF26E500081235D /* ARGLBaseViewController.m in Sources */,
+				D30166AA1EF28EB80070ED78 /* VideoPlane.m in Sources */,
 				8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */,
 				8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
