@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "GLBaseViewController.h"
 
-@interface ARGLBaseViewController : GLBaseViewController
-@property (assign, nonatomic) GLKMatrix4 worldProjectionMatrix; // 投影矩阵
-@property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
+@import ARKit;
+
+@interface ARGLBaseViewController : GLBaseViewController <ARSessionDelegate>
+@property (strong, nonatomic) ARSession *arSession;
+@property (assign, nonatomic) GLKMatrix4 worldProjectionMatrix; // 3D世界投影矩阵
+@property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 3D世界观察矩阵
 @end

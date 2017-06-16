@@ -19,10 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    float aspect = self.view.frame.size.width / self.view.frame.size.height;
-    self.worldProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 1000.0);
-    
-//    self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 2, 0, 0, 0, 0, 1, 0);
     
     // 设置平行光方向
     self.lightDirection = GLKVector3Make(1, -1, 0);
@@ -33,15 +29,12 @@
 
 - (void)createCube {
     Cube * cube = [[Cube alloc] initWithGLContext:self.glContext];
-    cube.modelMatrix = GLKMatrix4MakeTranslation(0, 0, 0);
+    cube.modelMatrix = GLKMatrix4MakeTranslation(0, 0, -4);
     [self.objects addObject:cube];
 }
 
 - (void)update {
     [super update];
-//    GLKVector3 eyePosition = GLKVector3Make(2 * sin(self.elapsedTime / 2.0), 2, 2 * cos(self.elapsedTime / 2.0));
-//    GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
-//    self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj update:self.timeSinceLastUpdate];
     }];
@@ -59,6 +52,10 @@
         [obj.context setUniform3fv:@"lightDirection" value:self.lightDirection];
         [obj draw:obj.context];
     }];
+}
+
+#pragma mark - AR Session Delegate
+- (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors {
     
 }
 @end
