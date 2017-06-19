@@ -17,6 +17,8 @@
 @property (strong, nonatomic) GLContext *videoPlaneContext;
 @property (assign, nonatomic) GLuint yTexture;
 @property (assign, nonatomic) GLuint uvTexture;
+
+@property (assign, nonatomic) CGRect viewport; // 计算适当的viewport保持图片的比例
 @end
 
 @implementation ARGLBaseViewController
@@ -78,6 +80,8 @@
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     [super glkView:view drawInRect:rect];
     
+    glViewport(self.viewport.origin.x, self.viewport.origin.y, self.viewport.size.width, self.viewport.size.height);
+    
     glDepthMask(GL_FALSE);
     [self.videoPlane.context active];
     [self.videoPlane.context setUniform1f:@"elapsedTime" value:(GLfloat)self.elapsedTime];
@@ -111,6 +115,20 @@
 
 #pragma make - AR Session Delegate
 
+- (void)setupViewport:(CGSize)imageSize {
+    CGFloat originViewportWidth = self.view.frame.size.width * [UIScreen mainScreen].scale;
+    CGFloat originViewportHeight = self.view.frame.size.height * [UIScreen mainScreen].scale;
+    CGFloat widthScale = originViewportWidth / imageSize.width;
+    CGFloat heightScale =  originViewportHeight / imageSize.height;
+    CGFloat scale = widthScale > heightScale ? widthScale : heightScale;
+    
+    CGFloat viewportWidth = imageSize.width * scale;
+    CGFloat viewportHeight = imageSize.height * scale;
+    CGFloat viewportX = (originViewportWidth - viewportWidth) / 2.0;
+    CGFloat viewportY = (originViewportHeight - viewportHeight) / 2.0;
+    self.viewport = CGRectMake(viewportX, viewportY, viewportWidth, viewportHeight);
+}
+
 - (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame {
     // 同步YUV信息到 yTexture 和 uvTexture
     CVPixelBufferRef pixelBuffer = frame.capturedImage;
@@ -131,6 +149,7 @@
     
     self.videoPlane.yuv_yTexture = self.yTexture;
     self.videoPlane.yuv_uvTexture = self.uvTexture;
+    [self setupViewport: CGSizeMake(imageHeight, imageWidth)];
     
     // 同步摄像机
     matrix_float4x4 cameraMatrix = matrix_invert([frame.camera transform]);
@@ -148,7 +167,7 @@
 }
 
 - (void)session:(ARSession *)session cameraDidChangeTrackingState:(ARCamera *)camera {
-    matrix_float4x4 projectionMatrix = [camera projectionMatrixWithViewportSize:self.view.bounds.size orientation:UIInterfaceOrientationPortrait zNear:0.1 zFar:1000];
+    matrix_float4x4 projectionMatrix = [camera projectionMatrixWithViewportSize:self.viewport.size orientation:UIInterfaceOrientationPortrait zNear:0.1 zFar:1000];
     GLKMatrix4 newWorldProjectionMatrix = GLKMatrix4Identity;
     for (int col = 0; col < 4; ++col) {
         for (int row = 0; row < 4; ++row) {
