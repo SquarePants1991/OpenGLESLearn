@@ -23,6 +23,8 @@
 		8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */; };
 		8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */; };
 		8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */; };
+		D314F0D71EF90BB4009878C2 /* car.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D314F0D61EF90BB1009878C2 /* car.mtl */; };
+		D314F0D81EF90BB5009878C2 /* car.obj in Resources */ = {isa = PBXBuildFile; fileRef = D314F0D51EF90BB1009878C2 /* car.obj */; };
 		D31C9B6B1EF8D02E00FF4903 /* smoothMonkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */; };
 		D31C9B6C1EF8D02E00FF4903 /* smoothMonkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = D31C9B691EF8CF9100FF4903 /* smoothMonkey.obj */; };
 		D31F594A1EF8C26600F55FE7 /* WavefrontOBJ.m in Sources */ = {isa = PBXBuildFile; fileRef = D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */; };
@@ -76,6 +78,8 @@
 		8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 		8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGeometry.h; sourceTree = "<group>"; };
 		8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLGeometry.m; sourceTree = "<group>"; };
+		D314F0D51EF90BB1009878C2 /* car.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = car.obj; sourceTree = "<group>"; };
+		D314F0D61EF90BB1009878C2 /* car.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = car.mtl; sourceTree = "<group>"; };
 		D31C9B691EF8CF9100FF4903 /* smoothMonkey.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = smoothMonkey.obj; sourceTree = "<group>"; };
 		D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = smoothMonkey.mtl; sourceTree = "<group>"; };
 		D31F59481EF8C26600F55FE7 /* WavefrontOBJ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WavefrontOBJ.h; sourceTree = "<group>"; };
@@ -197,6 +201,8 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D314F0D61EF90BB1009878C2 /* car.mtl */,
+				D314F0D51EF90BB1009878C2 /* car.obj */,
 				D3F7C2F41EF8F6C500A6CF8C /* cube.mtl */,
 				D3F7C2F51EF8F6C500A6CF8C /* cube.obj */,
 				D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */,
@@ -314,6 +320,8 @@
 			files = (
 				8E689D191EA5E1EB00ADB0A8 /* LaunchScreen.storyboard in Resources */,
 				D3F284261ECB2BE2009783FC /* vertex.glsl in Resources */,
+				D314F0D71EF90BB4009878C2 /* car.mtl in Resources */,
+				D314F0D81EF90BB5009878C2 /* car.obj in Resources */,
 				D3F7C2F61EF8F6FC00A6CF8C /* cube.mtl in Resources */,
 				D3F284251ECB2BE2009783FC /* texture.jpg in Resources */,
 				D3F7C2F71EF8F6FD00A6CF8C /* cube.obj in Resources */,

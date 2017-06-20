@@ -20,6 +20,6 @@ void main(void) {
     
     vec4 finalLightStrength = vec4(ambient + diffuse, 1.0);
 
-    vec4 materialColor = vec4(1.0, 0.0, 0.0, 1.0);//texture2D(diffuseMap, fragUV);
-    gl_FragColor = materialColor;//vec4(materialColor.rgb * finalLightStrength.rgb, 1.0);
+    vec4 materialColor = vec4((sin(elapsedTime) + 1.0) / 2.0, (cos(elapsedTime) + 1.0) / 4.0 + 0.5, (sin(elapsedTime) + 1.0) / 2.0, 1.0);//texture2D(diffuseMap, fragUV);
+    gl_FragColor = vec4(materialColor.rgb * finalLightStrength.rgb, 1.0);
 }

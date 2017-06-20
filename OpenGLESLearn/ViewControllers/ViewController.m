@@ -92,8 +92,9 @@
 }
 
 - (void)createMonkeyFromObj {
-    NSString *objFilePath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    NSString *objFilePath = [[NSBundle mainBundle] pathForResource:@"car" ofType:@"obj"];
     WavefrontOBJ *monkeyModel = [[WavefrontOBJ alloc] initWithGLContext:self.glContext objFile:objFilePath];
+    monkeyModel.modelMatrix = GLKMatrix4MakeRotation(- M_PI / 2.0, 0, 1, 0);
     [self.objects addObject:monkeyModel];
 }
 
@@ -101,7 +102,7 @@
 
 - (void)update {
     [super update];
-    GLKVector3 eyePosition = GLKVector3Make(2 * sin(self.elapsedTime / 2.0), sin(self.elapsedTime), 2 * cos(self.elapsedTime / 2.0));
+    GLKVector3 eyePosition = GLKVector3Make(200 * sin(self.elapsedTime), 100, 200 * cos(self.elapsedTime));
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {

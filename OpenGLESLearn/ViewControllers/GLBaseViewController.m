@@ -24,7 +24,7 @@
 #pragma mark - Setup Context
 - (void)setupContext {
     // 使用OpenGL ES2, ES2之后都采用Shader来管理渲染管线
-    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
     // 设置帧率为60fps
     self.preferredFramesPerSecond = 60;
     if (!self.context) {
