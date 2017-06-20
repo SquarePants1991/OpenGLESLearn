@@ -23,6 +23,7 @@
 		8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */; };
 		8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */; };
 		8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */; };
+		D31F594A1EF8C26600F55FE7 /* WavefrontOBJ.m in Sources */ = {isa = PBXBuildFile; fileRef = D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
 		D3F284201ECB2BE2009783FC /* GLObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284151ECB2BE2009783FC /* GLObject.m */; };
@@ -71,6 +72,8 @@
 		8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 		8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGeometry.h; sourceTree = "<group>"; };
 		8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLGeometry.m; sourceTree = "<group>"; };
+		D31F59481EF8C26600F55FE7 /* WavefrontOBJ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WavefrontOBJ.h; sourceTree = "<group>"; };
+		D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WavefrontOBJ.m; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
 		D3F284121ECB2BE2009783FC /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
@@ -177,6 +180,8 @@
 				8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */,
 				8EE3673C1EE8FABD005A8D86 /* Terrain.h */,
 				8EE3673D1EE8FABD005A8D86 /* Terrain.m */,
+				D31F59481EF8C26600F55FE7 /* WavefrontOBJ.h */,
+				D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -335,6 +340,7 @@
 				D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */,
 				8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */,
 				8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */,
+				D31F594A1EF8C26600F55FE7 /* WavefrontOBJ.m in Sources */,
 				8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
 				8EE3673E1EE8FABD005A8D86 /* Terrain.m in Sources */,
