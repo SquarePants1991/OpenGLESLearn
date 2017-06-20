@@ -23,6 +23,8 @@
 		8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */; };
 		8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */; };
 		8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */; };
+		D31C9B6B1EF8D02E00FF4903 /* smoothMonkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */; };
+		D31C9B6C1EF8D02E00FF4903 /* smoothMonkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = D31C9B691EF8CF9100FF4903 /* smoothMonkey.obj */; };
 		D31F594A1EF8C26600F55FE7 /* WavefrontOBJ.m in Sources */ = {isa = PBXBuildFile; fileRef = D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
@@ -35,6 +37,8 @@
 		D3F284261ECB2BE2009783FC /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D3F2841D1ECB2BE2009783FC /* vertex.glsl */; };
 		D3F2842C1ECB2C46009783FC /* GLBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284291ECB2C46009783FC /* GLBaseViewController.m */; };
 		D3F2842D1ECB2C46009783FC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F2842B1ECB2C46009783FC /* ViewController.m */; };
+		D3F7C2F61EF8F6FC00A6CF8C /* cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D3F7C2F41EF8F6C500A6CF8C /* cube.mtl */; };
+		D3F7C2F71EF8F6FD00A6CF8C /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = D3F7C2F51EF8F6C500A6CF8C /* cube.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +76,8 @@
 		8EF0AEF11EE644E5003A4EF9 /* Cylinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cylinder.m; sourceTree = "<group>"; };
 		8EF0AEF31EE647D7003A4EF9 /* GLGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGeometry.h; sourceTree = "<group>"; };
 		8EF0AEF41EE647D7003A4EF9 /* GLGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLGeometry.m; sourceTree = "<group>"; };
+		D31C9B691EF8CF9100FF4903 /* smoothMonkey.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = smoothMonkey.obj; sourceTree = "<group>"; };
+		D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = smoothMonkey.mtl; sourceTree = "<group>"; };
 		D31F59481EF8C26600F55FE7 /* WavefrontOBJ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WavefrontOBJ.h; sourceTree = "<group>"; };
 		D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WavefrontOBJ.m; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
@@ -91,6 +97,8 @@
 		D3F284291ECB2C46009783FC /* GLBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLBaseViewController.m; sourceTree = "<group>"; };
 		D3F2842A1ECB2C46009783FC /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D3F2842B1ECB2C46009783FC /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D3F7C2F41EF8F6C500A6CF8C /* cube.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = cube.mtl; sourceTree = "<group>"; };
+		D3F7C2F51EF8F6C500A6CF8C /* cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +197,10 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D3F7C2F41EF8F6C500A6CF8C /* cube.mtl */,
+				D3F7C2F51EF8F6C500A6CF8C /* cube.obj */,
+				D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */,
+				D31C9B691EF8CF9100FF4903 /* smoothMonkey.obj */,
 				8E75693A1EE93A3A004CC68F /* dirt_01.jpg */,
 				8E7569391EE93A3A004CC68F /* grass_01.jpg */,
 				8EE3673B1EE8FAA9005A8D86 /* terrain_01.jpg */,
@@ -302,7 +314,9 @@
 			files = (
 				8E689D191EA5E1EB00ADB0A8 /* LaunchScreen.storyboard in Resources */,
 				D3F284261ECB2BE2009783FC /* vertex.glsl in Resources */,
+				D3F7C2F61EF8F6FC00A6CF8C /* cube.mtl in Resources */,
 				D3F284251ECB2BE2009783FC /* texture.jpg in Resources */,
+				D3F7C2F71EF8F6FD00A6CF8C /* cube.obj in Resources */,
 				8E4D43421EE6AE89007AC649 /* metal_01.png in Resources */,
 				D3F284221ECB2BE2009783FC /* fragment.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
@@ -310,6 +324,8 @@
 				8E75693C1EE93A3E004CC68F /* grass_01.jpg in Resources */,
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
 				8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */,
+				D31C9B6B1EF8D02E00FF4903 /* smoothMonkey.mtl in Resources */,
+				D31C9B6C1EF8D02E00FF4903 /* smoothMonkey.obj in Resources */,
 				8E4D43441EE6AF02007AC649 /* metal_02.jpg in Resources */,
 				8E7569381EE9398A004CC68F /* frag_terrain.glsl in Resources */,
 				D3F284231ECB2BE2009783FC /* frg_laser.glsl in Resources */,

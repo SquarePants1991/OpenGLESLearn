@@ -11,6 +11,7 @@
 #import "Cube.h"
 #import "Cylinder.h"
 #import "Terrain.h"
+#import "WavefrontOBJ.h"
 
 @interface ViewController ()
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
@@ -36,7 +37,7 @@
 
 
     self.objects = [NSMutableArray new];
-    [self createTerrain];
+    [self createMonkeyFromObj];
 }
 
 - (void)createCubes {
@@ -90,11 +91,17 @@
     [self.objects addObject:terrain];
 }
 
+- (void)createMonkeyFromObj {
+    NSString *objFilePath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    WavefrontOBJ *monkeyModel = [[WavefrontOBJ alloc] initWithGLContext:self.glContext objFile:objFilePath];
+    [self.objects addObject:monkeyModel];
+}
+
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    GLKVector3 eyePosition = GLKVector3Make(500 * sin(self.elapsedTime / 2.0), sin(self.elapsedTime) * 50 + 250, 500 * cos(self.elapsedTime / 2.0));
+    GLKVector3 eyePosition = GLKVector3Make(2 * sin(self.elapsedTime / 2.0), sin(self.elapsedTime), 2 * cos(self.elapsedTime / 2.0));
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
