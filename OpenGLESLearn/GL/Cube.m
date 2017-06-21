@@ -28,6 +28,17 @@
     return self;
 }
 
+- (id)initWithGLContext:(GLContext *)context diffuseTextur:(GLKTextureInfo *)diffuseTexture {
+    self = [super initWithGLContext:context];
+    if (self) {
+        self.diffuseTexture = diffuseTexture;
+        self.modelMatrix = GLKMatrix4Identity;
+        [self genVBO];
+        [self genVAO];
+    }
+    return self;
+}
+
 - (void)dealloc {
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &vao);

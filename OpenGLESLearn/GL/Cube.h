@@ -9,6 +9,7 @@
 #import "GLObject.h"
 
 @interface Cube : GLObject
+- (id)initWithGLContext:(GLContext *)context diffuseTextur:(GLKTextureInfo *)diffuseTexture;
 - (void)update:(NSTimeInterval)timeSinceLastUpdate;
 - (void)draw:(GLContext *)glContext;
 @end

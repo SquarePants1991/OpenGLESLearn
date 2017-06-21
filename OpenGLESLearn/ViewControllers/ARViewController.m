@@ -15,6 +15,8 @@
 @property (strong, nonatomic) NSMutableDictionary<ARAnchor *, GLObject *> * objects;
 @property (assign, nonatomic) GLKVector3 lightDirection;
 @property (strong, nonatomic) FeaturePointCloud *pointCloud;
+
+@property (strong, nonatomic) GLKTextureInfo *grassTexture;
 @end
 
 @implementation ARViewController
@@ -27,6 +29,8 @@
     
     
     [self createPointCloud];
+    UIImage *image = [UIImage imageNamed:@"grass_01.jpg"];
+    self.grassTexture = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:nil];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tapGesture];
@@ -61,8 +65,38 @@
             glkTransform.m[col * 4 + row] = anchor.transform.columns[col][row];
         }
     }
+    
     GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(0.075, 0.075, 0.075);
     cube.modelMatrix = GLKMatrix4Multiply(glkTransform, scaleMatrix);
+}
+
+- (void)createPlaneWithAnchor:(ARPlaneAnchor *)anchor {
+    Cube * cube = [[Cube alloc] initWithGLContext:self.glContext diffuseTextur:self.grassTexture];
+    GLKMatrix4 glkTransform = GLKMatrix4Identity;
+    for (int col = 0; col < 4; ++col) {
+        for (int row = 0; row < 4; ++row) {
+            glkTransform.m[col * 4 + row] = anchor.transform.columns[col][row];
+        }
+    }
+    GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(anchor.extent[0], anchor.extent[1], anchor.extent[2]);
+    GLKMatrix4 translationMatrix = GLKMatrix4MakeTranslation(anchor.center[0], anchor.center[1], anchor.center[2]);
+    cube.modelMatrix = GLKMatrix4Multiply(translationMatrix, scaleMatrix);
+    cube.modelMatrix = GLKMatrix4Multiply(glkTransform, cube.modelMatrix);
+    [self.objects setObject:cube forKey:anchor];
+}
+
+- (void)updatePlaneWithAnchor:(ARPlaneAnchor *)anchor {
+    Cube * cube = (Cube *)self.objects[anchor];
+    GLKMatrix4 glkTransform = GLKMatrix4Identity;
+    for (int col = 0; col < 4; ++col) {
+        for (int row = 0; row < 4; ++row) {
+            glkTransform.m[col * 4 + row] = anchor.transform.columns[col][row];
+        }
+    }
+    GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(anchor.extent[0], anchor.extent[1], anchor.extent[2]);
+    GLKMatrix4 translationMatrix = GLKMatrix4MakeTranslation(anchor.center[0], anchor.center[1], anchor.center[2]);
+    cube.modelMatrix = GLKMatrix4Multiply(translationMatrix, scaleMatrix);
+    cube.modelMatrix = GLKMatrix4Multiply(glkTransform, cube.modelMatrix);
 }
 
 - (void)update {
@@ -96,12 +130,24 @@
 #pragma mark - Handle Tap & Create Cube
 - (void)handleTap:(UIGestureRecognizer *)gesture {
     ARFrame *currentFrame = [self.arSession currentFrame];
-    matrix_float4x4 translation = matrix_identity_float4x4;
-    translation.columns[3][2] = -0.2;
-    matrix_float4x4 transform = simd_mul(currentFrame.camera.transform, translation);
     
-    ARAnchor *anchor = [[ARAnchor alloc] initWithTransform:transform];
-    [self.arSession addAnchor:anchor];
+    CGPoint point = [gesture locationInView:gesture.view];
+    NSArray<ARHitTestResult *> *results = [currentFrame hitTest:CGPointMake(point.y / gesture.view.frame.size.height, point.x / gesture.view.frame.size.width) types:ARHitTestResultTypeExistingPlaneUsingExtent];
+    if (results && results.count > 0) {
+        for (ARHitTestResult *result in results) {
+            matrix_float4x4 anchorTransform = result.worldTransform;
+            anchorTransform.columns[3][1] += 0.075 / 2.0;
+            ARAnchor *anchor = [[ARAnchor alloc] initWithTransform:anchorTransform];
+            [self.arSession addAnchor:anchor];
+        }
+    } else {
+        matrix_float4x4 translation = matrix_identity_float4x4;
+        translation.columns[3][2] = -0.3;
+        matrix_float4x4 transform = simd_mul(currentFrame.camera.transform, translation);
+        
+        ARAnchor *anchor = [[ARAnchor alloc] initWithTransform:transform];
+        [self.arSession addAnchor:anchor];
+    }
 }
 
 #pragma mark - AR Session Delegate
@@ -109,20 +155,32 @@
 - (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame {
     [super session:session didUpdateFrame:frame];
     for (ARAnchor *anchor in [frame anchors]) {
-        [self updateCubeWithAnchor: anchor];
+        if ([anchor isKindOfClass:[ARPlaneAnchor class]]) {
+            [self updatePlaneWithAnchor:(ARPlaneAnchor *)anchor];
+        } else {
+            [self updateCubeWithAnchor: anchor];
+        }
     }
     [self.pointCloud setCloudData:frame.rawFeaturePoints];
 }
 
 - (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors {
     for (ARAnchor *anchor in anchors) {
-        [self createCubeWithAnchor:anchor];
+        if ([anchor isKindOfClass:[ARPlaneAnchor class]]) {
+            [self createPlaneWithAnchor:(ARPlaneAnchor *)anchor];
+        } else {
+            [self createCubeWithAnchor:anchor];
+        }
     }
 }
 
 - (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor *> *)anchors {
     for (ARAnchor *anchor in anchors) {
-        [self updateCubeWithAnchor: anchor];
+        if ([anchor isKindOfClass:[ARPlaneAnchor class]]) {
+            [self updatePlaneWithAnchor:(ARPlaneAnchor *)anchor];
+        } else {
+            [self updateCubeWithAnchor: anchor];
+        }
     }
 }
 
