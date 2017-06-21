@@ -9,10 +9,12 @@
 #import "ARViewController.h"
 #import "VideoPlane.h"
 #import "Cube.h"
+#import "FeaturePointCloud.h"
 
 @interface ARViewController ()
 @property (strong, nonatomic) NSMutableDictionary<ARAnchor *, GLObject *> * objects;
 @property (assign, nonatomic) GLKVector3 lightDirection;
+@property (strong, nonatomic) FeaturePointCloud *pointCloud;
 @end
 
 @implementation ARViewController
@@ -23,8 +25,19 @@
     self.lightDirection = GLKVector3Make(1, -1, 0);
     self.objects = [NSMutableDictionary new];
     
+    
+    [self createPointCloud];
+    
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tapGesture];
+}
+
+- (void)createPointCloud {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_point_cloud" ofType:@".glsl"];
+    GLContext *pointCloudContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    self.pointCloud = [[FeaturePointCloud alloc] initWithGLContext:pointCloudContext];
+    self.pointCloud.modelMatrix = GLKMatrix4Identity;
 }
 
 - (void)createCubeWithAnchor:(ARAnchor *)anchor {
@@ -57,6 +70,7 @@
     [self.objects.allValues enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj update:self.timeSinceLastUpdate];
     }];
+    [self.pointCloud update:self.timeSinceLastUpdate];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
@@ -71,6 +85,12 @@
         [obj.context setUniform3fv:@"lightDirection" value:self.lightDirection];
         [obj draw:obj.context];
     }];
+    
+    [self.pointCloud.context active];
+    [self.pointCloud.context setUniform1f:@"elapsedTime" value:(GLfloat)self.elapsedTime];
+    [self.pointCloud.context setUniformMatrix4fv:@"projectionMatrix" value:self.worldProjectionMatrix];
+    [self.pointCloud.context setUniformMatrix4fv:@"cameraMatrix" value: self.cameraMatrix];
+    [self.pointCloud draw:self.pointCloud.context];
 }
 
 #pragma mark - Handle Tap & Create Cube
@@ -91,6 +111,7 @@
     for (ARAnchor *anchor in [frame anchors]) {
         [self updateCubeWithAnchor: anchor];
     }
+    [self.pointCloud setCloudData:frame.rawFeaturePoints];
 }
 
 - (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors {

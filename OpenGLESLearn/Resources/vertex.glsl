@@ -16,5 +16,7 @@ void main(void) {
     fragNormal = normal;
     fragUV = uv;
     fragPosition = position.xyz;
+    // 为了现实特征点
+    gl_PointSize = 20.0;
     gl_Position = mvp * position;
 }

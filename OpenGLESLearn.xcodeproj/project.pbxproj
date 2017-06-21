@@ -27,6 +27,8 @@
 		D39C00CB1EF26E500081235D /* ARGLBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C00CA1EF26E500081235D /* ARGLBaseViewController.m */; };
 		D39C00CE1EF26F260081235D /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C00CD1EF26F260081235D /* ARViewController.m */; };
 		D39C00D01EF26FC00081235D /* frag_video.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D39C00CF1EF26FC00081235D /* frag_video.glsl */; };
+		D3D7D1811EFA088100F6A4B9 /* FeaturePointCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D7D1801EFA088100F6A4B9 /* FeaturePointCloud.m */; };
+		D3D7D1831EFA0ADC00F6A4B9 /* frag_point_cloud.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D3D7D1821EFA0ADC00F6A4B9 /* frag_point_cloud.glsl */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
 		D3F284201ECB2BE2009783FC /* GLObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284151ECB2BE2009783FC /* GLObject.m */; };
@@ -82,6 +84,9 @@
 		D39C00CD1EF26F260081235D /* ARViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARViewController.m; sourceTree = "<group>"; };
 		D39C00CF1EF26FC00081235D /* frag_video.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_video.glsl; sourceTree = "<group>"; };
 		D39C00D11EF270060081235D /* VideoPlane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPlane.h; sourceTree = "<group>"; };
+		D3D7D17F1EFA088100F6A4B9 /* FeaturePointCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeaturePointCloud.h; sourceTree = "<group>"; };
+		D3D7D1801EFA088100F6A4B9 /* FeaturePointCloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeaturePointCloud.m; sourceTree = "<group>"; };
+		D3D7D1821EFA0ADC00F6A4B9 /* frag_point_cloud.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_point_cloud.glsl; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
 		D3F284121ECB2BE2009783FC /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
@@ -190,6 +195,8 @@
 				8EE3673D1EE8FABD005A8D86 /* Terrain.m */,
 				D39C00D11EF270060081235D /* VideoPlane.h */,
 				D30166A91EF28E760070ED78 /* VideoPlane.m */,
+				D3D7D17F1EFA088100F6A4B9 /* FeaturePointCloud.h */,
+				D3D7D1801EFA088100F6A4B9 /* FeaturePointCloud.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -210,6 +217,7 @@
 				D3F2841D1ECB2BE2009783FC /* vertex.glsl */,
 				8E7569371EE9398A004CC68F /* frag_terrain.glsl */,
 				D39C00CF1EF26FC00081235D /* frag_video.glsl */,
+				D3D7D1821EFA0ADC00F6A4B9 /* frag_point_cloud.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -327,6 +335,7 @@
 				8E4D43441EE6AF02007AC649 /* metal_02.jpg in Resources */,
 				8E7569381EE9398A004CC68F /* frag_terrain.glsl in Resources */,
 				D3F284231ECB2BE2009783FC /* frg_laser.glsl in Resources */,
+				D3D7D1831EFA0ADC00F6A4B9 /* frag_point_cloud.glsl in Resources */,
 				8E689D141EA5E1EB00ADB0A8 /* Main.storyboard in Resources */,
 				D3F284241ECB2BE2009783FC /* laser.png in Resources */,
 			);
@@ -358,6 +367,7 @@
 				D30166AA1EF28EB80070ED78 /* VideoPlane.m in Sources */,
 				8E689D0E1EA5E1EB00ADB0A8 /* AppDelegate.m in Sources */,
 				8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */,
+				D3D7D1811EFA088100F6A4B9 /* FeaturePointCloud.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
 				8EE3673E1EE8FABD005A8D86 /* Terrain.m in Sources */,
 			);

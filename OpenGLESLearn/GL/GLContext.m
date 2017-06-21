@@ -68,6 +68,7 @@
 - (void)drawTrianglesWithVAO:(GLuint)vao vertexCount:(GLint)vertexCount {
     glBindVertexArrayOES(vao);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+    glBindVertexArrayOES(0);
 }
 
 - (void)drawGeometry:(GLGeometry *)geometry {
