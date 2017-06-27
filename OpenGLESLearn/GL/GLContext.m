@@ -68,6 +68,7 @@
 - (void)drawTrianglesWithVAO:(GLuint)vao vertexCount:(GLint)vertexCount {
     glBindVertexArrayOES(vao);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+    glBindVertexArrayOES(0);
 }
 
 - (void)drawGeometry:(GLGeometry *)geometry {
@@ -96,6 +97,11 @@
 - (void)setUniform3fv:(NSString *)uniformName value:(GLKVector3)value {
     GLuint location = glGetUniformLocation(self.program, uniformName.UTF8String);
     glUniform3fv(location, 1, value.v);
+}
+
+- (void)setUniform4fv:(NSString *)uniformName value:(GLKVector4)value {
+    GLuint location = glGetUniformLocation(self.program, uniformName.UTF8String);
+    glUniform4fv(location, 1, value.v);
 }
 
 - (void)setUniformMatrix4fv:(NSString *)uniformName value:(GLKMatrix4)value {
