@@ -14,11 +14,11 @@
 #import "WavefrontOBJ.h"
 
 typedef struct  {
-    GLKVector3 direction;
+    GLKVector3 position;
     GLKVector3 color;
     GLfloat indensity;
     GLfloat ambientIndensity;
-} Directionlight;
+} PointLight;
 
 typedef struct {
     GLKVector3 diffuseColor;
@@ -30,7 +30,7 @@ typedef struct {
 @interface ViewController ()
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
-@property (assign, nonatomic) Directionlight light;
+@property (assign, nonatomic) PointLight light;
 @property (assign, nonatomic) Material material;
 @property (assign, nonatomic) GLKVector3 eyePosition;
 
@@ -49,9 +49,9 @@ typedef struct {
     
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 6.5, 0, 0, 0, 0, 1, 0);
     
-    Directionlight defaultLight;
+    PointLight defaultLight;
     defaultLight.color = GLKVector3Make(1, 1, 1); // 白色的灯
-    defaultLight.direction = GLKVector3Make(1, -1, 0);
+    defaultLight.position = GLKVector3Make(30, 100, 0);
     defaultLight.indensity = 1.0;
     defaultLight.ambientIndensity = 0.1;
     self.light = defaultLight;
@@ -97,7 +97,7 @@ typedef struct {
         [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
         [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
         [obj.context setUniform3fv:@"eyePosition" value:self.eyePosition];
-        [obj.context setUniform3fv:@"light.direction" value:self.light.direction];
+        [obj.context setUniform3fv:@"light.position" value:self.light.position];
         [obj.context setUniform3fv:@"light.color" value:self.light.color];
         [obj.context setUniform1f:@"light.indensity" value:self.light.indensity];
         [obj.context setUniform1f:@"light.ambientIndensity" value:self.light.ambientIndensity];
@@ -120,7 +120,7 @@ typedef struct {
 }
 
 - (IBAction)indensityAdjust:(UISlider *)sender {
-    Directionlight _light = self.light;
+    PointLight _light = self.light;
     _light.indensity = sender.value;
     self.light = _light;
     
@@ -128,7 +128,7 @@ typedef struct {
 
 - (IBAction)lightColorAdjust:(UISlider *)sender {
     GLKVector3 yuv = GLKVector3Make(1.0, (cos(sender.value) + 1.0) / 2.0, (sin(sender.value) + 1.0) / 2.0);
-    Directionlight _light = self.light;
+    PointLight _light = self.light;
     _light.color = [self colorFromYUV:yuv];
     if (sender.value == sender.maximumValue) {
         _light.color = GLKVector3Make(1, 1, 1);

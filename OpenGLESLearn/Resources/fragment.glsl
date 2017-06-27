@@ -1,8 +1,8 @@
 precision highp float;
 
 // 平行光
-struct Directionlight {
-    vec3 direction;
+struct PointLight {
+    vec3 position;
     vec3 color;
     float indensity;
     float ambientIndensity;
@@ -20,7 +20,7 @@ varying vec2 fragUV;
 varying vec3 fragPosition;
 
 uniform float elapsedTime;
-uniform Directionlight light;
+uniform PointLight light;
 uniform Material material;
 uniform vec3 eyePosition;
 uniform mat4 normalMatrix;
@@ -29,7 +29,9 @@ uniform mat4 modelMatrix;
 uniform sampler2D diffuseMap;
 
 void main(void) {
-    vec3 normalizedLightDirection = normalize(-light.direction);
+    vec4 worldVertexPosition = modelMatrix * vec4(fragPosition, 1.0);
+    
+    vec3 normalizedLightDirection = normalize(light.position - worldVertexPosition.xyz);
     vec3 transformedNormal = normalize((normalMatrix * vec4(fragNormal, 1.0)).xyz);
     
     // 计算漫反射
@@ -41,7 +43,6 @@ void main(void) {
     vec3 ambient = vec3(light.ambientIndensity) * material.ambientColor;
     
     // 计算高光
-    vec4 worldVertexPosition = modelMatrix * vec4(fragPosition, 1.0);
     vec3 eyeVector = normalize(eyePosition - worldVertexPosition.xyz);
     vec3 halfVector = normalize(normalizedLightDirection + eyeVector);
     float specularStrength = dot(halfVector, transformedNormal);
