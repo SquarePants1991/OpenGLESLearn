@@ -10,6 +10,7 @@
 
 @interface WavefrontOBJ : GLObject
 - (id)initWithGLContext:(GLContext *)context objFile:(NSString *)filePath;
++ (id)objWithGLContext:(GLContext *)context objFile:(NSString *)filePath diffuseMap:(GLKTextureInfo *)diffuseMap normalMap:(GLKTextureInfo *)normalMap;
 - (void)update:(NSTimeInterval)timeSinceLastUpdate;
 - (void)draw:(GLContext *)glContext;
 @end

@@ -22,6 +22,9 @@
 @property (strong, nonatomic) NSMutableData *uvIndexData;
 
 @property (strong, nonatomic) NSMutableData *vertexData;
+
+@property (strong, nonatomic) GLKTextureInfo *normalMap;
+@property (strong, nonatomic) GLKTextureInfo *diffuseMap;
 @end
 
 @implementation WavefrontOBJ
@@ -37,12 +40,20 @@
         self.uvIndexData = [NSMutableData new];
         
         self.vertexData = [NSMutableData new];
+    
         [self loadDataFromObj:filePath];
         [self decompressToVertexArray];
         [self genBufferObjects];
         [self genVAO];
     }
     return self;
+}
+
++ (id)objWithGLContext:(GLContext *)context objFile:(NSString *)filePath diffuseMap:(GLKTextureInfo *)diffuseMap normalMap:(GLKTextureInfo *)normalMap {
+    WavefrontOBJ *wavefrontObj = [[WavefrontOBJ alloc] initWithGLContext:context objFile:filePath];
+    wavefrontObj.diffuseMap = diffuseMap;
+    wavefrontObj.normalMap = normalMap;
+    return wavefrontObj;
 }
 
 - (void)genBufferObjects {
@@ -56,7 +67,23 @@
     glBindVertexArrayOES(vao);
     
     glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    [self.context bindAttribs:NULL];
+    
+    GLuint positionAttribLocation = glGetAttribLocation(self.context.program, "position");
+    glEnableVertexAttribArray(positionAttribLocation);
+    GLuint colorAttribLocation = glGetAttribLocation(self.context.program, "normal");
+    glEnableVertexAttribArray(colorAttribLocation);
+    GLuint uvAttribLocation = glGetAttribLocation(self.context.program, "uv");
+    glEnableVertexAttribArray(uvAttribLocation);
+    GLuint tangentAttribLocation = glGetAttribLocation(self.context.program, "tangent");
+    glEnableVertexAttribArray(tangentAttribLocation);
+    GLuint bitangentAttribLocation = glGetAttribLocation(self.context.program, "bitangent");
+    glEnableVertexAttribArray(bitangentAttribLocation);
+    
+    glVertexAttribPointer(positionAttribLocation, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (char *)NULL);
+    glVertexAttribPointer(colorAttribLocation, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (char *)NULL + 3 * sizeof(GLfloat));
+    glVertexAttribPointer(uvAttribLocation, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (char *)NULL + 6 * sizeof(GLfloat));
+    glVertexAttribPointer(tangentAttribLocation, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (char *)NULL + 8 * sizeof(GLfloat));
+    glVertexAttribPointer(bitangentAttribLocation, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (char *)NULL + 11 * sizeof(GLfloat));
     
     glBindVertexArrayOES(0);
 }
@@ -70,6 +97,8 @@
     bool canInvert;
     GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(self.modelMatrix, &canInvert);
     [glContext setUniformMatrix4fv:@"normalMatrix" value:canInvert ? normalMatrix : GLKMatrix4Identity];
+    [glContext bindTexture:self.diffuseMap to:GL_TEXTURE0 uniformName:@"diffuseMap"];
+    [glContext bindTexture:self.normalMap to:GL_TEXTURE1 uniformName:@"normalMap"];
     NSInteger vertexCount = self.positionIndexData.length / sizeof(GLuint);
     [self.context drawTrianglesWithVAO:vao vertexCount:(GLuint)vertexCount];
 }
@@ -78,18 +107,40 @@
 
 - (void)decompressToVertexArray {
     NSInteger vertexCount = self.positionIndexData.length / sizeof(GLuint);
-    for (int i = 0; i < vertexCount; ++i) {
-        int positionIndex = 0;
-        [self.positionIndexData getBytes:&positionIndex range:NSMakeRange(i * sizeof(GLuint), sizeof(GLuint))];
-        [self.vertexData appendBytes:(void *)((char *)self.positionData.bytes + positionIndex * 3 * sizeof(GLfloat)) length: 3 * sizeof(GLfloat)];
+    NSInteger triangleCount = vertexCount / 3;
+    for (int triangleIndex = 0; triangleIndex < triangleCount; ++triangleIndex) {
+        GLKVector3 positions[3];
+        GLKVector2 uvs[3];
+        GLKVector3 normals[3];
+        for (int vertexIndex = triangleIndex * 3; vertexIndex < triangleIndex * 3 + 3; ++vertexIndex) {
+            int positionIndex = 0;
+            [self.positionIndexData getBytes:&positionIndex range:NSMakeRange(vertexIndex * sizeof(GLuint), sizeof(GLuint))];
+            [self.positionData getBytes:&positions[vertexIndex % 3] range:NSMakeRange(positionIndex * 3 * sizeof(GLfloat), 3 * sizeof(GLfloat))];
+            
+            int normalIndex = 0;
+            [self.normalIndexData getBytes:&normalIndex range:NSMakeRange(vertexIndex * sizeof(GLuint), sizeof(GLuint))];
+            [self.normalData getBytes:&normals[vertexIndex % 3] range:NSMakeRange(normalIndex * 3 * sizeof(GLfloat), 3 * sizeof(GLfloat))];
+            
+            int uvIndex = 0;
+            [self.uvIndexData getBytes:&uvIndex range:NSMakeRange(vertexIndex * sizeof(GLuint), sizeof(GLuint))];
+            [self.uvData getBytes:&uvs[vertexIndex % 3] range:NSMakeRange(uvIndex * 2 * sizeof(GLfloat), 2 * sizeof(GLfloat))];
+        }
+        GLKVector3 deltaPos1 = GLKVector3Subtract(positions[1], positions[0]);
+        GLKVector3 deltaPos2 = GLKVector3Subtract(positions[2], positions[0]);
+        GLKVector2 deltaUV1 = GLKVector2Subtract(uvs[1], uvs[0]);
+        GLKVector2 deltaUV2 = GLKVector2Subtract(uvs[2], uvs[0]);
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
         
-        int normalIndex = 0;
-        [self.normalIndexData getBytes:&normalIndex range:NSMakeRange(i * sizeof(GLuint), sizeof(GLuint))];
-        [self.vertexData appendBytes:(void *)((char *)self.normalData.bytes + normalIndex * 3 * sizeof(GLfloat)) length: 3 * sizeof(GLfloat)];
+        GLKVector3 tangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos1, deltaUV2.y), GLKVector3MultiplyScalar(deltaPos2, deltaUV1.y)), r);
+        GLKVector3 bitangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos2, deltaUV1.x), GLKVector3MultiplyScalar(deltaPos1, deltaUV2.x)), r);
         
-        int uvIndex = 0;
-        [self.uvIndexData getBytes:&uvIndex range:NSMakeRange(i * sizeof(GLuint), sizeof(GLuint))];
-        [self.vertexData appendBytes:(void *)((char *)self.uvData.bytes + uvIndex * 2 * sizeof(GLfloat)) length: 2 * sizeof(GLfloat)];
+for (int i = 0; i< 3; ++i) {
+    [self.vertexData appendBytes:&positions[i] length:sizeof(GLKVector3)];
+    [self.vertexData appendBytes:&normals[i] length:sizeof(GLKVector3)];
+    [self.vertexData appendBytes:&uvs[i] length:sizeof(GLKVector2)];
+    [self.vertexData appendBytes:&tangent length:sizeof(GLKVector3)];
+    [self.vertexData appendBytes:&bitangent length:sizeof(GLKVector3)];
+}
     }
 }
 

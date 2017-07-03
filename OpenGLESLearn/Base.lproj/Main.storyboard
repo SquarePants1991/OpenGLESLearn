@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.17" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="B9q-XC-igw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.19" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="B9q-XC-igw">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.16"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -39,7 +39,7 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="300" minValue="0.0" maxValue="300" translatesAutoresizingMaskIntoConstraints="NO" id="Fln-Ga-5Xh">
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="70" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Fln-Ga-5Xh">
                                                         <rect key="frame" x="101" y="0.0" width="263" height="31"/>
                                                         <connections>
                                                             <action selector="smoothnessAdjust:" destination="B9q-XC-igw" eventType="valueChanged" id="uxH-dv-K7K"/>
@@ -212,11 +212,27 @@
                                     <constraint firstItem="Aq7-iO-BSa" firstAttribute="top" secondItem="jWn-Tp-NPb" secondAttribute="top" id="xg8-k2-n8d"/>
                                 </constraints>
                             </view>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2e-b6-ePI">
+                                <rect key="frame" x="13" y="44" width="51" height="31"/>
+                                <connections>
+                                    <action selector="toggleUseNormalMap:" destination="B9q-XC-igw" eventType="valueChanged" id="C2e-Xm-SY9"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开关法线贴图" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tbq-PS-ZZ2">
+                                <rect key="frame" x="72" y="51.5" width="80" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="jWn-Tp-NPb" secondAttribute="trailing" id="42n-Qd-W59"/>
                             <constraint firstItem="Uk4-HO-9cN" firstAttribute="top" secondItem="jWn-Tp-NPb" secondAttribute="bottom" id="B1c-Kb-y8C"/>
+                            <constraint firstItem="tbq-PS-ZZ2" firstAttribute="leading" secondItem="n2e-b6-ePI" secondAttribute="trailing" constant="10" id="BlN-HN-Pu8"/>
+                            <constraint firstItem="n2e-b6-ePI" firstAttribute="leading" secondItem="awQ-Gs-kku" secondAttribute="leading" constant="13" id="FUW-PY-ozm"/>
                             <constraint firstItem="jWn-Tp-NPb" firstAttribute="leading" secondItem="awQ-Gs-kku" secondAttribute="leading" id="K0k-oJ-kei"/>
+                            <constraint firstItem="tbq-PS-ZZ2" firstAttribute="centerY" secondItem="n2e-b6-ePI" secondAttribute="centerY" id="ohe-Gp-bAH"/>
+                            <constraint firstItem="n2e-b6-ePI" firstAttribute="top" secondItem="awQ-Gs-kku" secondAttribute="top" constant="44" id="r8X-d6-WTb"/>
                         </constraints>
                         <connections>
                             <outlet property="delegate" destination="B9q-XC-igw" id="9OW-hM-Q3a"/>

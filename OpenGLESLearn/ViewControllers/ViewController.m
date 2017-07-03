@@ -36,6 +36,7 @@ typedef struct {
 
 @property (strong, nonatomic) WavefrontOBJ *carModel;
 @property (strong, nonatomic) NSMutableArray<GLObject *> * objects;
+@property (assign, nonatomic) BOOL useNormalMap;
 @end
 
 @implementation ViewController
@@ -60,16 +61,23 @@ typedef struct {
     material.ambientColor = GLKVector3Make(1, 1, 1);
     material.diffuseColor = GLKVector3Make(0.1, 0.1, 0.1);
     material.specularColor = GLKVector3Make(1, 1, 1);
-    material.smoothness = 300;
+    material.smoothness = 70;
     self.material = material;
+    
+    self.useNormalMap = YES;
     
     self.objects = [NSMutableArray new];
     [self createMonkeyFromObj];
 }
 
 - (void)createMonkeyFromObj {
-    NSString *objFilePath = [[NSBundle mainBundle] pathForResource:@"car" ofType:@"obj"];
-    self.carModel = [[WavefrontOBJ alloc] initWithGLContext:self.glContext objFile:objFilePath];
+    UIImage *normalImage = [UIImage imageNamed:@"normal.png"];
+    GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
+    UIImage *diffuseImage = [UIImage imageNamed:@"texture.jpg"];
+    GLKTextureInfo *diffuseMap = [GLKTextureLoader textureWithCGImage:diffuseImage.CGImage options:nil error:nil];
+    
+    NSString *objFilePath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    self.carModel = [WavefrontOBJ objWithGLContext:self.glContext objFile:objFilePath diffuseMap:diffuseMap normalMap:normalMap];
     self.carModel.modelMatrix = GLKMatrix4MakeRotation(- M_PI / 2.0, 0, 1, 0);
     [self.objects addObject:self.carModel];
 }
@@ -78,11 +86,11 @@ typedef struct {
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(60, 100, 200);
+    self.eyePosition = GLKVector3Make(0, 2, 6);
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
-    self.carModel.modelMatrix = GLKMatrix4MakeRotation(- M_PI / 2.0 * self.elapsedTime / 4.0, 0, 1, 0);
+    self.carModel.modelMatrix = GLKMatrix4MakeRotation(- M_PI / 2.0 * self.elapsedTime / 4.0, 1, 1, 1);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj update:self.timeSinceLastUpdate];
     }];
@@ -105,6 +113,8 @@ typedef struct {
         [obj.context setUniform3fv:@"material.ambientColor" value:self.material.ambientColor];
         [obj.context setUniform3fv:@"material.specularColor" value:self.material.specularColor];
         [obj.context setUniform1f:@"material.smoothness" value:self.material.smoothness];
+        
+        [obj.context setUniform1i:@"useNormalMap" value:self.useNormalMap];
         
         
         [obj draw:obj.context];
@@ -172,6 +182,11 @@ typedef struct {
     self.material = _material;
     sender.backgroundColor = [UIColor colorWithRed:_material.specularColor.r green:_material.specularColor.g blue:_material.specularColor.b alpha:1.0];
 }
+
+- (IBAction)toggleUseNormalMap:(UISwitch *)sender {
+    self.useNormalMap = sender.isOn;
+}
+
 
 
 - (GLKVector3)colorFromYUV:(GLKVector3)yuv {
