@@ -118,7 +118,7 @@ typedef struct {
     // 生成深度缓冲区的纹理对象并绑定到framebuffer上
     glGenTextures(1, &framebufferDepthTexture);
     glBindTexture(GL_TEXTURE_2D, framebufferDepthTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24_OES, framebufferSize.width, framebufferSize.height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, framebufferSize.width, framebufferSize.height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -126,7 +126,7 @@ typedef struct {
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT
                            , GL_TEXTURE_2D, framebufferDepthTexture, 0);
     
-    // 下面这段代码不使用纹理作为深度缓冲区。
+//    // 下面这段代码不使用纹理作为深度缓冲区。
 //    GLuint depthBufferID;
 //    glGenRenderbuffers(1, &depthBufferID);
 //    glBindRenderbuffer(GL_RENDERBUFFER, depthBufferID);
