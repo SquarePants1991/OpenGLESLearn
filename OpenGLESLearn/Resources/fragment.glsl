@@ -1,8 +1,8 @@
 precision highp float;
 
 // 平行光
-struct PointLight {
-    vec3 position;
+struct DirectionLight {
+    vec3 direction;
     vec3 color;
     float indensity;
     float ambientIndensity;
@@ -22,7 +22,7 @@ varying vec3 fragTangent;
 varying vec3 fragBitangent;
 
 uniform float elapsedTime;
-uniform PointLight light;
+uniform DirectionLight light;
 uniform Material material;
 uniform vec3 eyePosition;
 uniform mat4 normalMatrix;
@@ -32,10 +32,14 @@ uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 uniform bool useNormalMap;
 
+// projectors
+uniform mat4 projectorMatrix;
+uniform sampler2D projectorMap;
+
 void main(void) {
     vec4 worldVertexPosition = modelMatrix * vec4(fragPosition, 1.0);
     
-    vec3 normalizedLightDirection = normalize(light.position - worldVertexPosition.xyz);
+    vec3 normalizedLightDirection = normalize(-light.direction);
     vec3 transformedNormal = normalize((normalMatrix * vec4(fragNormal, 1.0)).xyz);
     vec3 transformedTangent = normalize((normalMatrix * vec4(fragTangent, 1.0)).xyz);
     vec3 transformedBitangent = normalize((normalMatrix * vec4(fragBitangent, 1.0)).xyz);
@@ -66,5 +70,14 @@ void main(void) {
     // 最终颜色计算
     vec3 finalColor = diffuse + ambient + specular;
     
-    gl_FragColor = vec4(finalColor, 1.0);
+    // 计算投影器产生的颜色
+    vec4 positionInProjectorSpace = projectorMatrix * modelMatrix * vec4(fragPosition, 1.0);
+    positionInProjectorSpace /= positionInProjectorSpace.w;
+    vec2 projectorUV = (positionInProjectorSpace.xy + 1.0) * 0.5;
+    
+    if (projectorUV.x >= 0.0 && projectorUV.x <=1.0 && projectorUV.y >= 0.0 && projectorUV.y <=1.0) {
+        gl_FragColor = texture2D(projectorMap, projectorUV) * 0.6 + vec4(finalColor, 1.0) * 0.4;
+    } else {
+        gl_FragColor = vec4(finalColor, 1.0);
+    }
 }

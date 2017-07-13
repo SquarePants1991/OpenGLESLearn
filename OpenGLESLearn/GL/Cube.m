@@ -12,18 +12,19 @@
     GLuint vbo;
     GLuint vao;
 }
-@property (strong, nonatomic) GLKTextureInfo *diffuseTexture;
+@property (strong, nonatomic) GLKTextureInfo *normalMap;
+@property (strong, nonatomic) GLKTextureInfo *diffuseMap;
 @end
 
 @implementation Cube
-- (instancetype)initWithGLContext:(GLContext *)context
-{
+- (id)initWithGLContext:(GLContext *)context diffuseMap:(GLKTextureInfo *)diffuseMap normalMap:(GLKTextureInfo *)normalMap {
     self = [super initWithGLContext:context];
     if (self) {
-        [self genTexture:[UIImage imageNamed:@"texture.jpg"]];
         self.modelMatrix = GLKMatrix4Identity;
         [self genVBO];
         [self genVAO];
+        self.diffuseMap = diffuseMap;
+        self.normalMap = normalMap;
     }
     return self;
 }
@@ -104,15 +105,8 @@
     bool canInvert;
     GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(self.modelMatrix, &canInvert);
     [glContext setUniformMatrix4fv:@"normalMatrix" value:canInvert ? normalMatrix : GLKMatrix4Identity];
-    [glContext bindTexture:self.diffuseTexture to:GL_TEXTURE0 uniformName:@"diffuseMap"];
+    [glContext bindTexture:self.diffuseMap to:GL_TEXTURE0 uniformName:@"diffuseMap"];
+    [glContext bindTexture:self.normalMap to:GL_TEXTURE1 uniformName:@"normalMap"];
     [glContext drawTrianglesWithVAO:vao vertexCount:36];
-}
-
-#pragma mark - Texture
-- (void)genTexture:(UIImage *)image {
-    if (image) {
-        NSError *error;
-        self.diffuseTexture = [GLKTextureLoader textureWithCGImage:image.CGImage options:nil error:&error];
-    }
 }
 @end
