@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "GLContext.h"
-#import "Cube.h"
+#import "WavefrontOBJ.h"
 
 typedef struct  {
     GLKVector3 direction;
@@ -41,6 +41,7 @@ typedef struct {
 // 投影器矩阵
 @property (assign, nonatomic) GLKMatrix4 projectorMatrix;
 @property (strong, nonatomic) GLKTextureInfo * projectorMap;
+@property (assign, nonatomic) BOOL useProjector;
 @end
 
 @implementation ViewController
@@ -67,11 +68,11 @@ typedef struct {
     material.smoothness = 70;
     self.material = material;
     
-    self.useNormalMap = NO;
+    self.useNormalMap = YES;
     
     self.objects = [NSMutableArray new];
-    [self createBox:GLKVector3Make(-1, 0.2, -1.3)];
-    [self createBox:GLKVector3Make(0.7, 0.4, 1.0)];
+    [self createBox:GLKVector3Make(-1, 0.5, -1.3)];
+    [self createBox:GLKVector3Make(1, 0.2, 1)];
     [self createFloor];
     
     GLKMatrix4 projectorProjectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1, 1, -100, 100);
@@ -80,16 +81,19 @@ typedef struct {
     
     UIImage *projectorImage = [UIImage imageNamed:@"squarepants.jpg"];
     self.projectorMap = [GLKTextureLoader textureWithCGImage:projectorImage.CGImage options:nil error:nil];
+    
+    self.useProjector = YES;
 }
 
 - (void)createFloor {
-    UIImage *normalImage = [UIImage imageNamed:@"normal.png"];
+    UIImage *normalImage = [UIImage imageNamed:@"stoneFloor_NRM.png"];
     GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
-    UIImage *diffuseImage = [UIImage imageNamed:@"texture.jpg"];
+    UIImage *diffuseImage = [UIImage imageNamed:@"stoneFloor.jpg"];
     GLKTextureInfo *diffuseMap = [GLKTextureLoader textureWithCGImage:diffuseImage.CGImage options:nil error:nil];
     
-    Cube *cube = [[Cube alloc] initWithGLContext:self.glContext diffuseMap:diffuseMap normalMap:normalMap];
-    cube.modelMatrix = GLKMatrix4MakeScale(5, 0.2, 5);
+    NSString *cubeObjFile = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    WavefrontOBJ *cube = [WavefrontOBJ objWithGLContext:self.glContext objFile:cubeObjFile diffuseMap:diffuseMap normalMap:normalMap];
+    cube.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0, -0.1, 0), GLKMatrix4MakeScale(3, 0.2, 3 ));
     [self.objects addObject:cube];
 }
 
@@ -99,7 +103,8 @@ typedef struct {
     UIImage *diffuseImage = [UIImage imageNamed:@"texture.jpg"];
     GLKTextureInfo *diffuseMap = [GLKTextureLoader textureWithCGImage:diffuseImage.CGImage options:nil error:nil];
     
-    Cube *cube = [[Cube alloc] initWithGLContext:self.glContext diffuseMap:diffuseMap normalMap:normalMap];
+    NSString *cubeObjFile = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
+    WavefrontOBJ *cube = [WavefrontOBJ objWithGLContext:self.glContext objFile:cubeObjFile diffuseMap:diffuseMap normalMap:normalMap];
     cube.modelMatrix = GLKMatrix4MakeTranslation(location.x, location.y, location.z);
     [self.objects addObject:cube];
 }
@@ -108,7 +113,7 @@ typedef struct {
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(2, 5, 2);
+    self.eyePosition = GLKVector3Make(1, 4, 4);
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
@@ -142,6 +147,7 @@ typedef struct {
         
         [obj.context setUniformMatrix4fv:@"projectorMatrix" value: self.projectorMatrix];
         [obj.context bindTexture:self.projectorMap to:GL_TEXTURE2 uniformName:@"projectorMap"];
+        [obj.context setUniform1i:@"useProjector" value:self.useProjector];
         
         [obj draw:obj.context];
     }];
@@ -151,6 +157,12 @@ typedef struct {
     glClearColor(0.7, 0.7, 0.7, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     [self drawObjects];
+}
+
+#pragma mark - UI Control
+
+- (IBAction)projectorEnableChanged:(UISwitch *)sender {
+    self.useProjector = sender.isOn;
 }
 
 @end

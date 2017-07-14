@@ -20,6 +20,26 @@
                     <glkView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" id="awQ-Gs-kku">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pDt-XU-Q8A">
+                                <rect key="frame" x="13" y="30" width="51" height="31"/>
+                                <connections>
+                                    <action selector="projectorEnableChanged:" destination="B9q-XC-igw" eventType="valueChanged" id="9AX-cV-4c3"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启或者关闭投影" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zAp-GY-E1j">
+                                <rect key="frame" x="72" y="37.5" width="114.5" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="pDt-XU-Q8A" firstAttribute="top" secondItem="LT5-xr-cIy" secondAttribute="bottom" constant="10" id="1iC-jD-qWy"/>
+                            <constraint firstItem="zAp-GY-E1j" firstAttribute="centerY" secondItem="pDt-XU-Q8A" secondAttribute="centerY" id="Jto-Vx-5Tf"/>
+                            <constraint firstItem="zAp-GY-E1j" firstAttribute="leading" secondItem="pDt-XU-Q8A" secondAttribute="trailing" constant="10" id="kby-up-dfn"/>
+                            <constraint firstItem="pDt-XU-Q8A" firstAttribute="leading" secondItem="awQ-Gs-kku" secondAttribute="leading" constant="13" id="nP7-1p-0OL"/>
+                        </constraints>
                         <connections>
                             <outlet property="delegate" destination="B9q-XC-igw" id="9OW-hM-Q3a"/>
                         </connections>
