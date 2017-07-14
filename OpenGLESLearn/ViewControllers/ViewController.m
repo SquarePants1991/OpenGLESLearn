@@ -15,7 +15,7 @@ typedef struct  {
     GLKVector3 color;
     GLfloat indensity;
     GLfloat ambientIndensity;
-} PointLight;
+} DirectionLight;
 
 typedef struct {
     GLKVector3 diffuseColor;
@@ -25,13 +25,13 @@ typedef struct {
 } Material;
 
 @interface ViewController () {
-    GLuint framebuffer;
+    GLuint shadowMapFramebuffer;
     GLuint framebufferColorTexture;
-    GLuint framebufferDepthTexture;
+    GLuint shadowDepthMap;
 }
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
-@property (assign, nonatomic) PointLight light;
+@property (assign, nonatomic) DirectionLight light;
 @property (assign, nonatomic) Material material;
 @property (assign, nonatomic) GLKVector3 eyePosition;
 
@@ -39,9 +39,11 @@ typedef struct {
 @property (assign, nonatomic) BOOL useNormalMap;
 
 // 投影器矩阵
-@property (assign, nonatomic) GLKMatrix4 projectorMatrix;
-@property (strong, nonatomic) GLKTextureInfo * projectorMap;
-@property (assign, nonatomic) BOOL useProjector;
+@property (assign, nonatomic) GLKMatrix4 lightProjectionMatrix;
+@property (assign, nonatomic) GLKMatrix4 lightCameraMatrix;
+@property (assign, nonatomic) CGSize shadowMapSize;
+@property (strong, nonatomic) GLContext * shadowMapContext;
+
 @end
 
 @implementation ViewController
@@ -54,7 +56,7 @@ typedef struct {
     self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 1000.0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 6.5, 0, 0, 0, 0, 1, 0);
     
-    PointLight defaultLight;
+    DirectionLight defaultLight;
     defaultLight.color = GLKVector3Make(1, 1, 1); // 白色的灯
     defaultLight.direction = GLKVector3Make(-1, -1, 0);
     defaultLight.indensity = 1.0;
@@ -68,21 +70,55 @@ typedef struct {
     material.smoothness = 70;
     self.material = material;
     
-    self.useNormalMap = YES;
+    self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
-    [self createBox:GLKVector3Make(-1, 0.5, -1.3)];
-    [self createBox:GLKVector3Make(1, 0.2, 1)];
+    [self createBox:GLKVector3Make(-1, 1, -1.3)];
+    [self createBox:GLKVector3Make(2, 1, 1)];
     [self createFloor];
     
-    GLKMatrix4 projectorProjectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1, 1, -100, 100);
-    GLKMatrix4 projectorCameraMatrix = GLKMatrix4MakeLookAt(0.4, 4, 0, 0, 0, 0, 0, 1, 0);
-    self.projectorMatrix = GLKMatrix4Multiply(projectorProjectionMatrix, projectorCameraMatrix);
+    self.lightProjectionMatrix = GLKMatrix4MakeOrtho(-10, 10, -10, 10, -100, 100);
+    self.lightCameraMatrix = GLKMatrix4MakeLookAt(-defaultLight.direction.x * 10, -defaultLight.direction.y * 10, -defaultLight.direction.z * 10, 0, 0, 0, 0, 1, 0);
     
-    UIImage *projectorImage = [UIImage imageNamed:@"squarepants.jpg"];
-    self.projectorMap = [GLKTextureLoader textureWithCGImage:projectorImage.CGImage options:nil error:nil];
     
-    self.useProjector = YES;
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_shadowmap" ofType:@".glsl"];
+    self.shadowMapContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    
+    [self createShadowMap];
+}
+
+- (void)createShadowMap {
+    self.shadowMapSize = CGSizeMake(1024, 1024);
+    glGenFramebuffers(1, &shadowMapFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFramebuffer);
+    
+    // 生成颜色缓冲区的纹理对象并绑定到framebuffer上
+    glGenTextures(1, &framebufferColorTexture);
+    glBindTexture(GL_TEXTURE_2D, framebufferColorTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.shadowMapSize.width, self.shadowMapSize.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebufferColorTexture, 0);
+    
+    // 生成深度缓冲区的纹理对象并绑定到framebuffer上
+    glGenTextures(1, &shadowDepthMap);
+    glBindTexture(GL_TEXTURE_2D, shadowDepthMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, self.shadowMapSize.width, self.shadowMapSize.height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT
+                           , GL_TEXTURE_2D, shadowDepthMap, 0);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE) {
+        // framebuffer生成失败
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 - (void)createFloor {
@@ -117,14 +153,15 @@ typedef struct {
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
+    DirectionLight light = self.light;
+    light.direction = GLKVector3Make(-sin(self.elapsedTime), -1, -cos(self.elapsedTime));
+    self.light = light;
+    self.lightProjectionMatrix = GLKMatrix4MakeOrtho(-10, 10, -10, 10, -100, 100);
+    self.lightCameraMatrix = GLKMatrix4MakeLookAt(-light.direction.x * 10, -light.direction.y * 10, -light.direction.z * 10, 0, 0, 0, 0, 1, 0);
+    
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj update:self.timeSinceLastUpdate];
     }];
-    
-    // update projector matrix
-    GLKMatrix4 projectorProjectionMatrix = GLKMatrix4MakeOrtho(-2, 2, -2, 2, -100, 100);
-    GLKMatrix4 projectorCameraMatrix = GLKMatrix4MakeLookAt(0, 4, 0, 0, 0, 0, cos(self.elapsedTime), 0, sin(self.elapsedTime));
-    self.projectorMatrix = GLKMatrix4Multiply(projectorProjectionMatrix, projectorCameraMatrix);
 }
 
 - (void)drawObjects {
@@ -145,15 +182,32 @@ typedef struct {
         
         [obj.context setUniform1i:@"useNormalMap" value:self.useNormalMap];
         
-        [obj.context setUniformMatrix4fv:@"projectorMatrix" value: self.projectorMatrix];
-        [obj.context bindTexture:self.projectorMap to:GL_TEXTURE2 uniformName:@"projectorMap"];
-        [obj.context setUniform1i:@"useProjector" value:self.useProjector];
+        [obj.context setUniformMatrix4fv:@"lightMatrix" value:GLKMatrix4Multiply(self.lightProjectionMatrix, self.lightCameraMatrix)];
+        [obj.context bindTextureName:shadowDepthMap to:GL_TEXTURE2 uniformName:@"shadowMap"];
         
         [obj draw:obj.context];
     }];
 }
 
+- (void)drawObjectsForShadowMap {
+    glCullFace(GL_FRONT);
+    [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
+        [self.shadowMapContext active];
+        [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.lightProjectionMatrix];
+        [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.lightCameraMatrix];
+        [obj draw:self.shadowMapContext];
+    }];
+    glCullFace(GL_BACK);
+}
+
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFramebuffer);
+    glViewport(0, 0, self.shadowMapSize.width, self.shadowMapSize.height);
+    glClearColor(0.7, 0.7, 0.7, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    [self drawObjectsForShadowMap];
+    
+    [(GLKView *)(self.view) bindDrawable];
     glClearColor(0.7, 0.7, 0.7, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     [self drawObjects];
@@ -162,7 +216,7 @@ typedef struct {
 #pragma mark - UI Control
 
 - (IBAction)projectorEnableChanged:(UISwitch *)sender {
-    self.useProjector = sender.isOn;
+    
 }
 
 @end

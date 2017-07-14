@@ -33,6 +33,7 @@
 		D37013B81F0A1433001AEF22 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = D37013B71F0A142E001AEF22 /* normal.png */; };
 		D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */; };
 		D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B61F188D6900EA64DF /* stoneFloor.jpg */; };
+		D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */; };
 		D3BD84091F177624002F5DB1 /* squarepants.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3BD84081F177618002F5DB1 /* squarepants.jpg */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
@@ -96,6 +97,7 @@
 		D37013B71F0A142E001AEF22 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
 		D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stoneFloor_NRM.png; sourceTree = "<group>"; };
 		D383E3B61F188D6900EA64DF /* stoneFloor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stoneFloor.jpg; sourceTree = "<group>"; };
+		D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_shadowmap.glsl; sourceTree = "<group>"; };
 		D3BD84081F177618002F5DB1 /* squarepants.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = squarepants.jpg; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				D3F2841D1ECB2BE2009783FC /* vertex.glsl */,
 				8E7569371EE9398A004CC68F /* frag_terrain.glsl */,
 				D310D8B41F0C85F100734C7F /* frag_framebuffer_plane.glsl */,
+				D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
 				8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */,
 				D310D8B51F0C85F100734C7F /* frag_framebuffer_plane.glsl in Resources */,
+				D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */,
 				D31C9B6B1EF8D02E00FF4903 /* smoothMonkey.mtl in Resources */,
 				D37013B81F0A1433001AEF22 /* normal.png in Resources */,
 				D31C9B6C1EF8D02E00FF4903 /* smoothMonkey.obj in Resources */,
