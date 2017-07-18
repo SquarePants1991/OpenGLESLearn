@@ -26,7 +26,6 @@ typedef struct {
 
 @interface ViewController () {
     GLuint shadowMapFramebuffer;
-    GLuint framebufferColorTexture;
     GLuint shadowDepthMap;
 }
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
@@ -70,11 +69,12 @@ typedef struct {
     material.smoothness = 70;
     self.material = material;
     
-    self.useNormalMap = NO;
+    self.useNormalMap = YES;
     
     self.objects = [NSMutableArray new];
-    [self createBox:GLKVector3Make(-1, 1, -1.3)];
-    [self createBox:GLKVector3Make(2, 1, 1)];
+    [self createBox:GLKVector3Make(-1, 0.6, -1.3) size: GLKVector3Make(0.6, 0.6, 0.6)];
+    [self createBox:GLKVector3Make(2, 1, 1) size: GLKVector3Make(0.4, 1, 0.4)];
+    [self createBox:GLKVector3Make(0.2, 1.3, 0.8) size: GLKVector3Make(0.3, 1.3, 0.4)];
     [self createFloor];
     
     self.lightProjectionMatrix = GLKMatrix4MakeOrtho(-10, 10, -10, 10, -100, 100);
@@ -92,16 +92,6 @@ typedef struct {
     self.shadowMapSize = CGSizeMake(1024, 1024);
     glGenFramebuffers(1, &shadowMapFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFramebuffer);
-    
-    // 生成颜色缓冲区的纹理对象并绑定到framebuffer上
-    glGenTextures(1, &framebufferColorTexture);
-    glBindTexture(GL_TEXTURE_2D, framebufferColorTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.shadowMapSize.width, self.shadowMapSize.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebufferColorTexture, 0);
     
     // 生成深度缓冲区的纹理对象并绑定到framebuffer上
     glGenTextures(1, &shadowDepthMap);
@@ -133,7 +123,7 @@ typedef struct {
     [self.objects addObject:cube];
 }
 
-- (void)createBox:(GLKVector3)location {
+- (void)createBox:(GLKVector3)location size:(GLKVector3)size {
     UIImage *normalImage = [UIImage imageNamed:@"normal.png"];
     GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
     UIImage *diffuseImage = [UIImage imageNamed:@"texture.jpg"];
@@ -142,6 +132,7 @@ typedef struct {
     NSString *cubeObjFile = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     WavefrontOBJ *cube = [WavefrontOBJ objWithGLContext:self.glContext objFile:cubeObjFile diffuseMap:diffuseMap normalMap:normalMap];
     cube.modelMatrix = GLKMatrix4MakeTranslation(location.x, location.y, location.z);
+    cube.modelMatrix = GLKMatrix4Multiply(cube.modelMatrix, GLKMatrix4MakeScale(size.x, size.y, size.z));
     [self.objects addObject:cube];
 }
 
@@ -190,14 +181,12 @@ typedef struct {
 }
 
 - (void)drawObjectsForShadowMap {
-    glCullFace(GL_FRONT);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [self.shadowMapContext active];
         [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.lightProjectionMatrix];
         [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.lightCameraMatrix];
         [obj draw:self.shadowMapContext];
     }];
-    glCullFace(GL_BACK);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
@@ -212,12 +201,5 @@ typedef struct {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     [self drawObjects];
 }
-
-#pragma mark - UI Control
-
-- (IBAction)projectorEnableChanged:(UISwitch *)sender {
-    
-}
-
 @end
 
