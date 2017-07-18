@@ -53,7 +53,6 @@ void main(void) {
         transformedNormal = TBN * normalFromMap;
     }
     
-    float bias = max(0.05 * (1.0 - dot(transformedNormal, normalizedLightDirection)), 0.005);
     float shadow = 0.0;
     vec4 positionInLightSpace = lightMatrix * modelMatrix * vec4(fragPosition, 1.0);
     positionInLightSpace /= positionInLightSpace.w;
@@ -62,7 +61,7 @@ void main(void) {
     
     if (shadowUV.x >= 0.0 && shadowUV.x <=1.0 && shadowUV.y >= 0.0 && shadowUV.y <=1.0) {
         vec4 shadowColor = texture2D(shadowMap, shadowUV);
-        if (shadowColor.r < positionInLightSpace.z - 0.001) {
+        if (shadowColor.r < positionInLightSpace.z) {
             shadow = 0.1;
         } else {
             shadow = 1.0;
