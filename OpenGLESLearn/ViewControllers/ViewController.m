@@ -69,7 +69,7 @@ typedef struct {
     material.smoothness = 70;
     self.material = material;
     
-    self.useNormalMap = YES;
+    self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
     [self createBox:GLKVector3Make(-1, 0.6, -1.3) size: GLKVector3Make(0.6, 0.6, 0.6)];
@@ -119,7 +119,7 @@ typedef struct {
     
     NSString *cubeObjFile = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     WavefrontOBJ *cube = [WavefrontOBJ objWithGLContext:self.glContext objFile:cubeObjFile diffuseMap:diffuseMap normalMap:normalMap];
-    cube.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0, -0.1, 0), GLKMatrix4MakeScale(3, 0.2, 3 ));
+    cube.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0, -1, 0), GLKMatrix4MakeScale(3, 1, 3 ));
     [self.objects addObject:cube];
 }
 
