@@ -62,13 +62,20 @@ void main(void) {
     vec2 shadowUV = positionInLightSpace.xy;
     
     if (shadowUV.x >= 0.0 && shadowUV.x <=1.0 && shadowUV.y >= 0.0 && shadowUV.y <=1.0) {
-        vec4 shadowColor = texture2D(shadowMap, shadowUV);
-        if (shadowColor.r + bias < positionInLightSpace.z) {
-            shadow = 0.1;
-        } else {
-            shadow = 1.0;
+        vec2 texelSize = 1.0 / vec2(1024, 1024);
+        for(int x = -1; x <= 1; ++x)
+        {
+            for(int y = -1; y <= 1; ++y)
+            {
+                float pcfDepth = texture2D(shadowMap, shadowUV + vec2(x, y) * texelSize).r;
+                shadow += positionInLightSpace.z - bias < pcfDepth ? 1.0 : 0.0;
+            }
         }
+        shadow /= 9.0;
+    } else {
+        shadow = 1.0;
     }
+    
     
     // 计算漫反射
     float diffuseStrength = dot(normalizedLightDirection, transformedNormal);
