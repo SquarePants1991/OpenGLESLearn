@@ -66,11 +66,11 @@ typedef struct {
     self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
-    [self createSphere];
+    [self createMonkey];
     [self createCubeTexture];
 }
 
-- (void)createSphere {
+- (void)createMonkey {
     UIImage *normalImage = [UIImage imageNamed:@"metal.jpg"];
     GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
     UIImage *diffuseImage = [UIImage imageNamed:@"metal.jpg"];
