@@ -24,10 +24,8 @@ typedef struct {
     GLfloat smoothness; // 0 ~ 1000 越高显得越光滑
 } Material;
 
-@interface ViewController () {
-    GLuint shadowMapFramebuffer;
-    GLuint shadowDepthMap;
-}
+@interface ViewController ()
+
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
 @property (assign, nonatomic) DirectionLight light;
@@ -37,11 +35,7 @@ typedef struct {
 @property (strong, nonatomic) NSMutableArray<GLObject *> * objects;
 @property (assign, nonatomic) BOOL useNormalMap;
 
-// 投影器矩阵
-@property (assign, nonatomic) GLKMatrix4 lightProjectionMatrix;
-@property (assign, nonatomic) GLKMatrix4 lightCameraMatrix;
-@property (assign, nonatomic) CGSize shadowMapSize;
-@property (strong, nonatomic) GLContext * shadowMapContext;
+@property (strong, nonatomic) GLKTextureInfo * cubeTexture;
 
 @end
 
@@ -64,94 +58,51 @@ typedef struct {
     
     Material material;
     material.ambientColor = GLKVector3Make(1, 1, 1);
-    material.diffuseColor = GLKVector3Make(0.1, 0.1, 0.1);
+    material.diffuseColor = GLKVector3Make(0.8, 0.1, 0.2);
     material.specularColor = GLKVector3Make(1, 1, 1);
-    material.smoothness = 70;
+    material.smoothness = 700;
     self.material = material;
     
-    self.useNormalMap = YES;
+    self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
-    [self createBox:GLKVector3Make(-1, 0.6, -1.3) size: GLKVector3Make(0.6, 0.6, 0.6)];
-    [self createBox:GLKVector3Make(2, 1, 1) size: GLKVector3Make(0.4, 1, 0.4)];
-    [self createBox:GLKVector3Make(0.2, 1.3, 0.8) size: GLKVector3Make(0.3, 1.3, 0.4)];
-    [self createFloor];
-    
-    self.lightProjectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1, 1, -3, 10);
-    self.lightCameraMatrix = GLKMatrix4MakeLookAt(-defaultLight.direction.x * 10, -defaultLight.direction.y * 10, -defaultLight.direction.z * 10, 0, 0, 0, 0, 1, 0);
-    
-    
-    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
-    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_shadowmap" ofType:@".glsl"];
-    self.shadowMapContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
-    
-    [self createShadowMap];
+    [self createSphere];
+    [self createCubeTexture];
 }
 
-- (void)createShadowMap {
-    self.shadowMapSize = CGSizeMake(1024, 1024);
-    glGenFramebuffers(1, &shadowMapFramebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFramebuffer);
+- (void)createSphere {
+    UIImage *normalImage = [UIImage imageNamed:@"metal.jpg"];
+    GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
+    UIImage *diffuseImage = [UIImage imageNamed:@"metal.jpg"];
+    GLKTextureInfo *diffuseMap = [GLKTextureLoader textureWithCGImage:diffuseImage.CGImage options:nil error:nil];
     
-    // 生成深度缓冲区的纹理对象并绑定到framebuffer上
-    glGenTextures(1, &shadowDepthMap);
-    glBindTexture(GL_TEXTURE_2D, shadowDepthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, self.shadowMapSize.width, self.shadowMapSize.height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT
-                           , GL_TEXTURE_2D, shadowDepthMap, 0);
-    
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (status != GL_FRAMEBUFFER_COMPLETE) {
-        // framebuffer生成失败
+    NSString *objFile = [[NSBundle mainBundle] pathForResource:@"smoothMonkey" ofType:@"obj"];
+    WavefrontOBJ *sphere = [WavefrontOBJ objWithGLContext:self.glContext objFile:objFile diffuseMap:diffuseMap normalMap:normalMap];
+    sphere.modelMatrix = GLKMatrix4Identity;
+    [self.objects addObject:sphere];
+}
+
+- (void)createCubeTexture {
+    NSMutableArray *files = [NSMutableArray new];
+    for (int i = 0; i < 6; ++i) {
+        NSString *filename = [NSString stringWithFormat:@"cube-%d", i + 1];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:filename ofType:@"jpg"];
+        [files addObject:filePath];
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    NSError *error;
+    self.cubeTexture = [GLKTextureLoader cubeMapWithContentsOfFiles:files options:nil error:&error];
 }
-
-- (void)createFloor {
-    UIImage *normalImage = [UIImage imageNamed:@"stoneFloor_NRM.png"];
-    GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
-    UIImage *diffuseImage = [UIImage imageNamed:@"stoneFloor.jpg"];
-    GLKTextureInfo *diffuseMap = [GLKTextureLoader textureWithCGImage:diffuseImage.CGImage options:nil error:nil];
-    
-    NSString *cubeObjFile = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
-    WavefrontOBJ *cube = [WavefrontOBJ objWithGLContext:self.glContext objFile:cubeObjFile diffuseMap:diffuseMap normalMap:normalMap];
-    cube.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0, -1, 0), GLKMatrix4MakeScale(30, 1, 30 ));
-    [self.objects addObject:cube];
-}
-
-- (void)createBox:(GLKVector3)location size:(GLKVector3)size {
-    UIImage *normalImage = [UIImage imageNamed:@"normal.png"];
-    GLKTextureInfo *normalMap = [GLKTextureLoader textureWithCGImage:normalImage.CGImage options:nil error:nil];
-    UIImage *diffuseImage = [UIImage imageNamed:@"texture.jpg"];
-    GLKTextureInfo *diffuseMap = [GLKTextureLoader textureWithCGImage:diffuseImage.CGImage options:nil error:nil];
-    
-    NSString *cubeObjFile = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
-    WavefrontOBJ *cube = [WavefrontOBJ objWithGLContext:self.glContext objFile:cubeObjFile diffuseMap:diffuseMap normalMap:normalMap];
-    cube.modelMatrix = GLKMatrix4MakeTranslation(location.x, location.y, location.z);
-    cube.modelMatrix = GLKMatrix4Multiply(cube.modelMatrix, GLKMatrix4MakeScale(size.x, size.y, size.z));
-    [self.objects addObject:cube];
-}
-
 
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(1, 4, 4);
+    self.eyePosition = GLKVector3Make(2, 1, 2);
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
-    DirectionLight light = self.light;
-    light.direction = GLKVector3Make(-sin(self.elapsedTime), -1, -cos(self.elapsedTime));
-    self.light = light;
-    self.lightProjectionMatrix = GLKMatrix4MakeOrtho(-10, 10, -10, 10, 0.1, 28);
-    self.lightCameraMatrix = GLKMatrix4MakeLookAt(-light.direction.x * 10, -light.direction.y * 10, -light.direction.z * 10, 0, 0, 0, 0, 1, 0);
-    
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
+        obj.modelMatrix = GLKMatrix4MakeRotation(self.elapsedTime, 0, 1, 0);
         [obj update:self.timeSinceLastUpdate];
     }];
 }
@@ -174,30 +125,14 @@ typedef struct {
         
         [obj.context setUniform1i:@"useNormalMap" value:self.useNormalMap];
         
-        [obj.context setUniformMatrix4fv:@"lightMatrix" value:GLKMatrix4Multiply(self.lightProjectionMatrix, self.lightCameraMatrix)];
-        [obj.context bindTextureName:shadowDepthMap to:GL_TEXTURE2 uniformName:@"shadowMap"];
+        [obj.context bindCubeTexture:self.cubeTexture to:GL_TEXTURE3 uniformName:@"envMap"];
         
         [obj draw:obj.context];
     }];
 }
 
-- (void)drawObjectsForShadowMap {
-    [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
-        [self.shadowMapContext active];
-        [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.lightProjectionMatrix];
-        [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.lightCameraMatrix];
-        [obj draw:self.shadowMapContext];
-    }];
-}
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFramebuffer);
-    glViewport(0, 0, self.shadowMapSize.width, self.shadowMapSize.height);
-    glClearColor(0.7, 0.7, 0.7, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    [self drawObjectsForShadowMap];
-    
-    [(GLKView *)(self.view) bindDrawable];
     glClearColor(0.7, 0.7, 0.7, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     [self drawObjects];

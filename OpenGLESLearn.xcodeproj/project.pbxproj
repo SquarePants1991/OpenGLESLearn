@@ -30,6 +30,15 @@
 		D31C9B6B1EF8D02E00FF4903 /* smoothMonkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */; };
 		D31C9B6C1EF8D02E00FF4903 /* smoothMonkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = D31C9B691EF8CF9100FF4903 /* smoothMonkey.obj */; };
 		D31F594A1EF8C26600F55FE7 /* WavefrontOBJ.m in Sources */ = {isa = PBXBuildFile; fileRef = D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */; };
+		D328744C1F395CA400BD42C8 /* metal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D328744B1F395CA400BD42C8 /* metal.jpg */; };
+		D3585DD71F3951E6003F1076 /* cube-5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3585DD11F3951E6003F1076 /* cube-5.jpg */; };
+		D3585DD81F3951E6003F1076 /* cube-6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3585DD21F3951E6003F1076 /* cube-6.jpg */; };
+		D3585DD91F3951E6003F1076 /* cube-3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3585DD31F3951E6003F1076 /* cube-3.jpg */; };
+		D3585DDA1F3951E6003F1076 /* cube-4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3585DD41F3951E6003F1076 /* cube-4.jpg */; };
+		D3585DDB1F3951E6003F1076 /* cube-2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3585DD51F3951E6003F1076 /* cube-2.jpg */; };
+		D3585DDC1F3951E6003F1076 /* cube-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3585DD61F3951E6003F1076 /* cube-1.jpg */; };
+		D3585DDF1F3953AF003F1076 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDD1F3953AF003F1076 /* sphere.obj */; };
+		D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDE1F3953AF003F1076 /* sphere.mtl */; };
 		D37013B81F0A1433001AEF22 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = D37013B71F0A142E001AEF22 /* normal.png */; };
 		D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */; };
 		D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B61F188D6900EA64DF /* stoneFloor.jpg */; };
@@ -94,6 +103,15 @@
 		D31C9B6A1EF8CF9100FF4903 /* smoothMonkey.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = smoothMonkey.mtl; sourceTree = "<group>"; };
 		D31F59481EF8C26600F55FE7 /* WavefrontOBJ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WavefrontOBJ.h; sourceTree = "<group>"; };
 		D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WavefrontOBJ.m; sourceTree = "<group>"; };
+		D328744B1F395CA400BD42C8 /* metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metal.jpg; sourceTree = "<group>"; };
+		D3585DD11F3951E6003F1076 /* cube-5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cube-5.jpg"; sourceTree = "<group>"; };
+		D3585DD21F3951E6003F1076 /* cube-6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cube-6.jpg"; sourceTree = "<group>"; };
+		D3585DD31F3951E6003F1076 /* cube-3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cube-3.jpg"; sourceTree = "<group>"; };
+		D3585DD41F3951E6003F1076 /* cube-4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cube-4.jpg"; sourceTree = "<group>"; };
+		D3585DD51F3951E6003F1076 /* cube-2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cube-2.jpg"; sourceTree = "<group>"; };
+		D3585DD61F3951E6003F1076 /* cube-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cube-1.jpg"; sourceTree = "<group>"; };
+		D3585DDD1F3953AF003F1076 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
+		D3585DDE1F3953AF003F1076 /* sphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.mtl; sourceTree = "<group>"; };
 		D37013B71F0A142E001AEF22 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
 		D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stoneFloor_NRM.png; sourceTree = "<group>"; };
 		D383E3B61F188D6900EA64DF /* stoneFloor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stoneFloor.jpg; sourceTree = "<group>"; };
@@ -218,6 +236,15 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D328744B1F395CA400BD42C8 /* metal.jpg */,
+				D3585DDE1F3953AF003F1076 /* sphere.mtl */,
+				D3585DDD1F3953AF003F1076 /* sphere.obj */,
+				D3585DD61F3951E6003F1076 /* cube-1.jpg */,
+				D3585DD51F3951E6003F1076 /* cube-2.jpg */,
+				D3585DD31F3951E6003F1076 /* cube-3.jpg */,
+				D3585DD41F3951E6003F1076 /* cube-4.jpg */,
+				D3585DD11F3951E6003F1076 /* cube-5.jpg */,
+				D3585DD21F3951E6003F1076 /* cube-6.jpg */,
 				D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */,
 				D383E3B61F188D6900EA64DF /* stoneFloor.jpg */,
 				D3BD84081F177618002F5DB1 /* squarepants.jpg */,
@@ -350,6 +377,7 @@
 				D3F284251ECB2BE2009783FC /* texture.jpg in Resources */,
 				D3F7C2F71EF8F6FD00A6CF8C /* cube.obj in Resources */,
 				8E4D43421EE6AE89007AC649 /* metal_01.png in Resources */,
+				D328744C1F395CA400BD42C8 /* metal.jpg in Resources */,
 				D3F284221ECB2BE2009783FC /* fragment.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
 				8E4D43401EE6AE87007AC649 /* metal_03.png in Resources */,
@@ -357,6 +385,14 @@
 				D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */,
 				D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */,
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
+				D3585DDC1F3951E6003F1076 /* cube-1.jpg in Resources */,
+				D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */,
+				D3585DDB1F3951E6003F1076 /* cube-2.jpg in Resources */,
+				D3585DD91F3951E6003F1076 /* cube-3.jpg in Resources */,
+				D3585DDF1F3953AF003F1076 /* sphere.obj in Resources */,
+				D3585DDA1F3951E6003F1076 /* cube-4.jpg in Resources */,
+				D3585DD71F3951E6003F1076 /* cube-5.jpg in Resources */,
+				D3585DD81F3951E6003F1076 /* cube-6.jpg in Resources */,
 				8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */,
 				D310D8B51F0C85F100734C7F /* frag_framebuffer_plane.glsl in Resources */,
 				D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */,

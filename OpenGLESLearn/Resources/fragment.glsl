@@ -31,6 +31,7 @@ uniform mat4 modelMatrix;
 uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 uniform bool useNormalMap;
+uniform samplerCube envMap;
 
 // shadow
 uniform mat4 lightMatrix;
@@ -76,17 +77,20 @@ void main(void) {
         shadow = 1.0;
     }
     
+    vec3 eyeVector = normalize(eyePosition - worldVertexPosition.xyz);
     
     // 计算漫反射
     float diffuseStrength = dot(normalizedLightDirection, transformedNormal);
     diffuseStrength = clamp(diffuseStrength, 0.0, 1.0);
-    vec3 diffuse = diffuseStrength * light.color * texture2D(diffuseMap, fragUV).rgb * light.indensity * shadow;
+    vec3 surfaceColor = material.diffuseColor;
+    vec3 diffuse = diffuseStrength * light.color * surfaceColor * light.indensity * shadow;
     
     // 计算环境光
     vec3 ambient = vec3(light.ambientIndensity) * material.ambientColor;
+    vec3 reflectVec = normalize(reflect(-eyeVector, transformedNormal));
+    ambient += 0.5 * diffuseStrength *  textureCube(envMap, reflectVec).rgb;
     
     // 计算高光
-    vec3 eyeVector = normalize(eyePosition - worldVertexPosition.xyz);
     vec3 halfVector = normalize(normalizedLightDirection + eyeVector);
     float specularStrength = dot(halfVector, transformedNormal);
     specularStrength = pow(specularStrength, material.smoothness);
