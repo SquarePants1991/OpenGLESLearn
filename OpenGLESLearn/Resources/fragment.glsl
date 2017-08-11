@@ -82,13 +82,11 @@ void main(void) {
     // 计算漫反射
     float diffuseStrength = dot(normalizedLightDirection, transformedNormal);
     diffuseStrength = clamp(diffuseStrength, 0.0, 1.0);
-    vec3 surfaceColor = material.diffuseColor;
+    vec3 surfaceColor = texture2D(diffuseMap, fragUV).rgb;
     vec3 diffuse = diffuseStrength * light.color * surfaceColor * light.indensity * shadow;
     
     // 计算环境光
     vec3 ambient = vec3(light.ambientIndensity) * material.ambientColor;
-    vec3 reflectVec = normalize(reflect(-eyeVector, transformedNormal));
-    ambient += 0.5 * diffuseStrength *  textureCube(envMap, reflectVec).rgb;
     
     // 计算高光
     vec3 halfVector = normalize(normalizedLightDirection + eyeVector);

@@ -55,6 +55,8 @@
 		D3F284261ECB2BE2009783FC /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D3F2841D1ECB2BE2009783FC /* vertex.glsl */; };
 		D3F2842C1ECB2C46009783FC /* GLBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284291ECB2C46009783FC /* GLBaseViewController.m */; };
 		D3F2842D1ECB2C46009783FC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F2842B1ECB2C46009783FC /* ViewController.m */; };
+		D3F364151F3DB43B0013FA9C /* Mirror.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F364141F3DB43B0013FA9C /* Mirror.m */; };
+		D3F364171F3DB8590013FA9C /* texture_NRM.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F364161F3DB8590013FA9C /* texture_NRM.png */; };
 		D3F7C2F61EF8F6FC00A6CF8C /* cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D3F7C2F41EF8F6C500A6CF8C /* cube.mtl */; };
 		D3F7C2F71EF8F6FD00A6CF8C /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = D3F7C2F51EF8F6C500A6CF8C /* cube.obj */; };
 /* End PBXBuildFile section */
@@ -134,6 +136,9 @@
 		D3F284291ECB2C46009783FC /* GLBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLBaseViewController.m; sourceTree = "<group>"; };
 		D3F2842A1ECB2C46009783FC /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D3F2842B1ECB2C46009783FC /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D3F364131F3DB43B0013FA9C /* Mirror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mirror.h; sourceTree = "<group>"; };
+		D3F364141F3DB43B0013FA9C /* Mirror.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Mirror.m; sourceTree = "<group>"; };
+		D3F364161F3DB8590013FA9C /* texture_NRM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_NRM.png; sourceTree = "<group>"; };
 		D3F7C2F41EF8F6C500A6CF8C /* cube.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = cube.mtl; sourceTree = "<group>"; };
 		D3F7C2F51EF8F6C500A6CF8C /* cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -229,6 +234,8 @@
 				D31F59491EF8C26600F55FE7 /* WavefrontOBJ.m */,
 				D310D8B11F0C821F00734C7F /* Plane.h */,
 				D310D8B21F0C821F00734C7F /* Plane.m */,
+				D3F364131F3DB43B0013FA9C /* Mirror.h */,
+				D3F364141F3DB43B0013FA9C /* Mirror.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -236,6 +243,7 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D3F364161F3DB8590013FA9C /* texture_NRM.png */,
 				D328744B1F395CA400BD42C8 /* metal.jpg */,
 				D3585DDE1F3953AF003F1076 /* sphere.mtl */,
 				D3585DDD1F3953AF003F1076 /* sphere.obj */,
@@ -386,6 +394,7 @@
 				D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */,
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
 				D3585DDC1F3951E6003F1076 /* cube-1.jpg in Resources */,
+				D3F364171F3DB8590013FA9C /* texture_NRM.png in Resources */,
 				D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */,
 				D3585DDB1F3951E6003F1076 /* cube-2.jpg in Resources */,
 				D3585DD91F3951E6003F1076 /* cube-3.jpg in Resources */,
@@ -421,6 +430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3F364151F3DB43B0013FA9C /* Mirror.m in Sources */,
 				D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */,
 				D3F284211ECB2BE2009783FC /* Laser.m in Sources */,
 				D3F2842D1ECB2C46009783FC /* ViewController.m in Sources */,
