@@ -40,10 +40,12 @@
 		D3585DDF1F3953AF003F1076 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDD1F3953AF003F1076 /* sphere.obj */; };
 		D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDE1F3953AF003F1076 /* sphere.mtl */; };
 		D37013B81F0A1433001AEF22 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = D37013B71F0A142E001AEF22 /* normal.png */; };
+		D37D40B31F5E4C0E00DA231B /* Camera.m in Sources */ = {isa = PBXBuildFile; fileRef = D37D40B21F5E4C0E00DA231B /* Camera.m */; };
 		D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */; };
 		D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B61F188D6900EA64DF /* stoneFloor.jpg */; };
 		D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */; };
 		D3BD84091F177624002F5DB1 /* squarepants.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3BD84081F177618002F5DB1 /* squarepants.jpg */; };
+		D3C9E40A1F5D51BD00DBE7E4 /* frag_mirror.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D3C9E4091F5D51BD00DBE7E4 /* frag_mirror.glsl */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
 		D3F284201ECB2BE2009783FC /* GLObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284151ECB2BE2009783FC /* GLObject.m */; };
@@ -115,10 +117,13 @@
 		D3585DDD1F3953AF003F1076 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
 		D3585DDE1F3953AF003F1076 /* sphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.mtl; sourceTree = "<group>"; };
 		D37013B71F0A142E001AEF22 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
+		D37D40B11F5E4C0E00DA231B /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		D37D40B21F5E4C0E00DA231B /* Camera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Camera.m; sourceTree = "<group>"; };
 		D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stoneFloor_NRM.png; sourceTree = "<group>"; };
 		D383E3B61F188D6900EA64DF /* stoneFloor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stoneFloor.jpg; sourceTree = "<group>"; };
 		D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_shadowmap.glsl; sourceTree = "<group>"; };
 		D3BD84081F177618002F5DB1 /* squarepants.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = squarepants.jpg; sourceTree = "<group>"; };
+		D3C9E4091F5D51BD00DBE7E4 /* frag_mirror.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_mirror.glsl; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
 		D3F284121ECB2BE2009783FC /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
@@ -236,6 +241,8 @@
 				D310D8B21F0C821F00734C7F /* Plane.m */,
 				D3F364131F3DB43B0013FA9C /* Mirror.h */,
 				D3F364141F3DB43B0013FA9C /* Mirror.m */,
+				D37D40B11F5E4C0E00DA231B /* Camera.h */,
+				D37D40B21F5E4C0E00DA231B /* Camera.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -277,6 +284,7 @@
 				8E7569371EE9398A004CC68F /* frag_terrain.glsl */,
 				D310D8B41F0C85F100734C7F /* frag_framebuffer_plane.glsl */,
 				D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */,
+				D3C9E4091F5D51BD00DBE7E4 /* frag_mirror.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -408,6 +416,7 @@
 				D31C9B6B1EF8D02E00FF4903 /* smoothMonkey.mtl in Resources */,
 				D37013B81F0A1433001AEF22 /* normal.png in Resources */,
 				D31C9B6C1EF8D02E00FF4903 /* smoothMonkey.obj in Resources */,
+				D3C9E40A1F5D51BD00DBE7E4 /* frag_mirror.glsl in Resources */,
 				8E4D43441EE6AF02007AC649 /* metal_02.jpg in Resources */,
 				8E7569381EE9398A004CC68F /* frag_terrain.glsl in Resources */,
 				D3F284231ECB2BE2009783FC /* frg_laser.glsl in Resources */,
@@ -431,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3F364151F3DB43B0013FA9C /* Mirror.m in Sources */,
+				D37D40B31F5E4C0E00DA231B /* Camera.m in Sources */,
 				D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */,
 				D3F284211ECB2BE2009783FC /* Laser.m in Sources */,
 				D3F2842D1ECB2C46009783FC /* ViewController.m in Sources */,

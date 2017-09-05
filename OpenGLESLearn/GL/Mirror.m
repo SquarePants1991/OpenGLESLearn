@@ -9,5 +9,7 @@
 #import "Mirror.h"
 
 @implementation Mirror
-
+- (void)draw:(GLContext *)glContext {
+    [super draw:glContext];
+}
 @end
