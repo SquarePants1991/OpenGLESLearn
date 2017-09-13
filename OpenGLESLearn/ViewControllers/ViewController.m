@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "GLContext.h"
 #import "WavefrontOBJ.h"
+#import "SkyBox.h"
+#import "Terrain.h"
 
 typedef struct  {
     GLKVector3 direction;
@@ -37,6 +39,7 @@ typedef struct {
 
 @property (strong, nonatomic) GLKTextureInfo * cubeTexture;
 
+@property (strong, nonatomic) SkyBox * skyBox;
 @end
 
 @implementation ViewController
@@ -46,7 +49,7 @@ typedef struct {
     
     // 使用透视投影矩阵
     float aspect = self.view.frame.size.width / self.view.frame.size.height;
-    self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90), aspect, 0.1, 1000.0);
+    self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(60), aspect, 0.1, 10000.0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 6.5, 0, 0, 0, 0, 1, 0);
     
     DirectionLight defaultLight;
@@ -59,15 +62,16 @@ typedef struct {
     Material material;
     material.ambientColor = GLKVector3Make(1, 1, 1);
     material.diffuseColor = GLKVector3Make(0.8, 0.1, 0.2);
-    material.specularColor = GLKVector3Make(1, 1, 1);
-    material.smoothness = 700;
+    material.specularColor = GLKVector3Make(0, 0, 0);
+    material.smoothness = 0;
     self.material = material;
     
     self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
-    [self createMonkey];
+    [self createTerrain];
     [self createCubeTexture];
+    [self createSkyBox];
 }
 
 - (void)createMonkey {
@@ -82,54 +86,62 @@ typedef struct {
     [self.objects addObject:sphere];
 }
 
+- (void)createTerrain {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_terrain" ofType:@".glsl"];
+    GLContext *terrainContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    
+    GLKTextureInfo *grass = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"grass_01.jpg"].CGImage options:nil error:nil];
+    NSError *error;
+    GLKTextureInfo *dirt = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"dirt_01.jpg"].CGImage options:nil error:&error];
+    glBindTexture(GL_TEXTURE_2D, grass.name);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glBindTexture(GL_TEXTURE_2D, dirt.name);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    
+    UIImage *heightMap = [UIImage imageNamed:@"terrain_01.jpg"];
+    Terrain *terrain = [[Terrain alloc] initWithGLContext:terrainContext heightMap:heightMap size:CGSizeMake(500, 500) height:100 grass:grass dirt:dirt];
+    terrain.modelMatrix = GLKMatrix4MakeTranslation(-250, 0, -250);
+    [self.objects addObject:terrain];
+}
+
 - (void)createCubeTexture {
     NSMutableArray *files = [NSMutableArray new];
     for (int i = 0; i < 6; ++i) {
         NSString *filename = [NSString stringWithFormat:@"cube-%d", i + 1];
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:filename ofType:@"jpg"];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:filename ofType:@"tga"];
         [files addObject:filePath];
     }
     NSError *error;
     self.cubeTexture = [GLKTextureLoader cubeMapWithContentsOfFiles:files options:nil error:&error];
 }
 
+- (void)createSkyBox {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_skybox" ofType:@".glsl"];
+    GLContext *skyGlContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    
+    self.skyBox = [[SkyBox alloc] initWithGLContext:skyGlContext diffuseMap:nil normalMap:nil];
+    self.skyBox.modelMatrix = GLKMatrix4MakeScale(1000, 1000, 1000);
+}
+
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(2, 1, 2);
-    GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
+    self.eyePosition = GLKVector3Make(5 * sin(self.elapsedTime / 1.5), 30, 5 * cos(self.elapsedTime /  1.5));
+    GLKVector3 lookAtPosition = GLKVector3Make(0, 32, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
-        obj.modelMatrix = GLKMatrix4MakeRotation(self.elapsedTime, 0, 1, 0);
         [obj update:self.timeSinceLastUpdate];
     }];
 }
 
-- (void)drawObjects {
-    [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
-        [obj.context active];
-        [obj.context setUniform1f:@"elapsedTime" value:(GLfloat)self.elapsedTime];
-        [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
-        [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
-        [obj.context setUniform3fv:@"eyePosition" value:self.eyePosition];
-        [obj.context setUniform3fv:@"light.direction" value:self.light.direction];
-        [obj.context setUniform3fv:@"light.color" value:self.light.color];
-        [obj.context setUniform1f:@"light.indensity" value:self.light.indensity];
-        [obj.context setUniform1f:@"light.ambientIndensity" value:self.light.ambientIndensity];
-        [obj.context setUniform3fv:@"material.diffuseColor" value:self.material.diffuseColor];
-        [obj.context setUniform3fv:@"material.ambientColor" value:self.material.ambientColor];
-        [obj.context setUniform3fv:@"material.specularColor" value:self.material.specularColor];
-        [obj.context setUniform1f:@"material.smoothness" value:self.material.smoothness];
-        
-        [obj.context setUniform1i:@"useNormalMap" value:self.useNormalMap];
-        
-        [obj.context bindCubeTexture:self.cubeTexture to:GL_TEXTURE3 uniformName:@"envMap"];
-        
-        [obj draw:obj.context];
-    }];
-}
+
 
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
