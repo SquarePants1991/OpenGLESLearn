@@ -101,7 +101,7 @@
 
 - (void)runAR {
     if (@available(iOS 11.0, *)) {
-        ARWorldTrackingSessionConfiguration *config = [ARWorldTrackingSessionConfiguration new];
+        ARWorldTrackingConfiguration *config = [ARWorldTrackingConfiguration new];
         config.planeDetection = ARPlaneDetectionHorizontal;
         [self.arSession runWithConfiguration:config];
     }
@@ -167,7 +167,7 @@
 }
 
 - (void)session:(ARSession *)session cameraDidChangeTrackingState:(ARCamera *)camera {
-    matrix_float4x4 projectionMatrix = [camera projectionMatrixWithViewportSize:self.viewport.size orientation:UIInterfaceOrientationPortrait zNear:0.1 zFar:1000];
+    matrix_float4x4 projectionMatrix = [camera projectionMatrixForOrientation:UIInterfaceOrientationPortrait viewportSize:self.viewport.size zNear:0.1 zFar:1000];
     GLKMatrix4 newWorldProjectionMatrix = GLKMatrix4Identity;
     for (int col = 0; col < 4; ++col) {
         for (int row = 0; row < 4; ++row) {
