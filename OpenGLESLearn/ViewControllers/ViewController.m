@@ -141,7 +141,36 @@ typedef struct {
     }];
 }
 
-
+- (void)drawObjects {
+    
+    [self.skyBox.context active];
+    [self.skyBox.context setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
+    [self.skyBox.context setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
+    [self.skyBox.context bindCubeTexture:self.cubeTexture to:GL_TEXTURE4 uniformName:@"envMap"];
+    [self.skyBox draw: self.skyBox.context];
+    
+    [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
+        [obj.context active];
+        [obj.context setUniform1f:@"elapsedTime" value:(GLfloat)self.elapsedTime];
+        [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
+        [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
+        [obj.context setUniform3fv:@"eyePosition" value:self.eyePosition];
+        [obj.context setUniform3fv:@"light.direction" value:self.light.direction];
+        [obj.context setUniform3fv:@"light.color" value:self.light.color];
+        [obj.context setUniform1f:@"light.indensity" value:self.light.indensity];
+        [obj.context setUniform1f:@"light.ambientIndensity" value:self.light.ambientIndensity];
+        [obj.context setUniform3fv:@"material.diffuseColor" value:self.material.diffuseColor];
+        [obj.context setUniform3fv:@"material.ambientColor" value:self.material.ambientColor];
+        [obj.context setUniform3fv:@"material.specularColor" value:self.material.specularColor];
+        [obj.context setUniform1f:@"material.smoothness" value:self.material.smoothness];
+        
+        [obj.context setUniform1i:@"useNormalMap" value:self.useNormalMap];
+        
+        [obj.context bindCubeTexture:self.cubeTexture to:GL_TEXTURE4 uniformName:@"envMap"];
+        
+        [obj draw:obj.context];
+    }];
+}
 
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
