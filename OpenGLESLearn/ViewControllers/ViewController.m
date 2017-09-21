@@ -26,6 +26,22 @@ typedef struct {
     GLfloat smoothness; // 0 ~ 1000 越高显得越光滑
 } Material;
 
+typedef enum : NSUInteger {
+    FogTypeLinear = 0,
+    FogTypeExp = 1,
+    FogTypeExpSquare  = 2,
+} FogType;
+
+typedef struct {
+    FogType fogType;
+    // for linear
+    GLfloat fogStart;
+    GLfloat fogEnd;
+    // for exp & exp square
+    GLfloat fogIndensity;
+    GLKVector3 fogColor;
+} Fog;
+
 @interface ViewController ()
 
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
@@ -40,6 +56,7 @@ typedef struct {
 @property (strong, nonatomic) GLKTextureInfo * cubeTexture;
 
 @property (strong, nonatomic) SkyBox * skyBox;
+@property (assign, nonatomic) Fog fog;
 @end
 
 @implementation ViewController
@@ -65,6 +82,14 @@ typedef struct {
     material.specularColor = GLKVector3Make(0, 0, 0);
     material.smoothness = 0;
     self.material = material;
+    
+    Fog fog;
+    fog.fogColor = GLKVector3Make(1, 1,1);
+    fog.fogStart = 0;
+    fog.fogEnd = 200;
+    fog.fogIndensity = 0.02;
+    fog.fogType = FogTypeExpSquare;
+    self.fog = fog;
     
     self.useNormalMap = NO;
     
@@ -132,8 +157,8 @@ typedef struct {
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(5 * sin(self.elapsedTime / 1.5), 30, 5 * cos(self.elapsedTime /  1.5));
-    GLKVector3 lookAtPosition = GLKVector3Make(0, 32, 0);
+    self.eyePosition = GLKVector3Make(5 * sin(self.elapsedTime / 1.5), 20, 5 * cos(self.elapsedTime /  1.5));
+    GLKVector3 lookAtPosition = GLKVector3Make(0, 20, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
@@ -141,16 +166,27 @@ typedef struct {
     }];
 }
 
+- (void)bindFog:(GLContext *)context {
+    [context setUniform1i:@"fog.fogType" value:self.fog.fogType];
+    [context setUniform1f:@"fog.fogStart" value:self.fog.fogStart];
+    [context setUniform1f:@"fog.fogEnd" value:self.fog.fogEnd];
+    [context setUniform1f:@"fog.fogIndensity" value:self.fog.fogIndensity];
+    [context setUniform3fv:@"fog.fogColor" value:self.fog.fogColor];
+}
+    
 - (void)drawObjects {
     
     [self.skyBox.context active];
+    [self bindFog:self.skyBox.context];
     [self.skyBox.context setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
     [self.skyBox.context setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
+    [self.skyBox.context setUniform3fv:@"eyePosition" value:self.eyePosition];
     [self.skyBox.context bindCubeTexture:self.cubeTexture to:GL_TEXTURE4 uniformName:@"envMap"];
     [self.skyBox draw: self.skyBox.context];
     
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
         [obj.context active];
+        [self bindFog:obj.context];
         [obj.context setUniform1f:@"elapsedTime" value:(GLfloat)self.elapsedTime];
         [obj.context setUniformMatrix4fv:@"projectionMatrix" value:self.projectionMatrix];
         [obj.context setUniformMatrix4fv:@"cameraMatrix" value:self.cameraMatrix];
