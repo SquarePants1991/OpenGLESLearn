@@ -99,5 +99,5 @@ void main(void) {
     // 最终颜色计算
     vec3 finalColor = diffuse + ambient + specular;
     
-    gl_FragColor = vec4(finalColor, 1.0);
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
