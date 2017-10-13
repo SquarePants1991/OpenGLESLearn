@@ -14,5 +14,6 @@
 @property (strong, nonatomic) GLObject * geometry;
 @property (strong, nonatomic) RigidBody * rigidBody;
 
+- (instancetype)initWithGeometry:(GLObject *)geometry rigidBody:(RigidBody *)rigidBody;
 - (void)update:(NSTimeInterval)deltaTime;
 @end

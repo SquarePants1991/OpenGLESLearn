@@ -39,7 +39,7 @@ uniform sampler2D shadowMap;
 
 void main(void) {
     vec4 worldVertexPosition = modelMatrix * vec4(fragPosition, 1.0);
-    
+
     vec3 normalizedLightDirection = normalize(-light.direction);
     vec3 transformedNormal = normalize((normalMatrix * vec4(fragNormal, 1.0)).xyz);
     vec3 transformedTangent = normalize((normalMatrix * vec4(fragTangent, 1.0)).xyz);
@@ -53,7 +53,7 @@ void main(void) {
         vec3 normalFromMap = (texture2D(normalMap, fragUV).rgb * 2.0 - 1.0);
         transformedNormal = TBN * normalFromMap;
     }
-    
+
     float bias = 0.005*tan(acos(dot(transformedNormal, normalizedLightDirection)));
     bias = clamp(bias, 0.0, 0.01);
     float shadow = 0.0;
@@ -61,7 +61,7 @@ void main(void) {
     positionInLightSpace /= positionInLightSpace.w;
     positionInLightSpace = (positionInLightSpace + 1.0) * 0.5;
     vec2 shadowUV = positionInLightSpace.xy;
-    
+
     if (shadowUV.x >= 0.0 && shadowUV.x <=1.0 && shadowUV.y >= 0.0 && shadowUV.y <=1.0) {
         vec2 texelSize = 1.0 / vec2(1024, 1024);
         for(int x = -1; x <= 1; ++x)
@@ -76,20 +76,18 @@ void main(void) {
     } else {
         shadow = 1.0;
     }
-    
+
     vec3 eyeVector = normalize(eyePosition - worldVertexPosition.xyz);
     
     // 计算漫反射
     float diffuseStrength = dot(normalizedLightDirection, transformedNormal);
     diffuseStrength = clamp(diffuseStrength, 0.0, 1.0);
-    vec3 surfaceColor = material.diffuseColor;
+    vec3 surfaceColor = texture2D(diffuseMap, fragUV).xyz;
     vec3 diffuse = diffuseStrength * light.color * surfaceColor * light.indensity * shadow;
     
     // 计算环境光
-    vec3 ambient = vec3(light.ambientIndensity) * material.ambientColor;
-    vec3 reflectVec = normalize(reflect(-eyeVector, transformedNormal));
-    ambient += 0.5 * diffuseStrength *  textureCube(envMap, reflectVec).rgb;
-    
+    vec3 ambient = vec3(light.ambientIndensity);
+
     // 计算高光
     vec3 halfVector = normalize(normalizedLightDirection + eyeVector);
     float specularStrength = dot(halfVector, transformedNormal);
@@ -97,7 +95,7 @@ void main(void) {
     vec3 specular = specularStrength * material.specularColor * light.color * light.indensity * shadow;
     
     // 最终颜色计算
-    vec3 finalColor = diffuse + ambient + specular;
+    vec3 finalColor = diffuse + specular;
     
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    gl_FragColor = vec4(finalColor, 1.0);
 }

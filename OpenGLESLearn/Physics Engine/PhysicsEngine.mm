@@ -35,7 +35,8 @@
         broadphase = new btDbvtBroadphase();
         
         world = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,configration);
-        world->setGravity(btVector3(0,-25,0));
+        
+        world->setGravity(btVector3(0,-9.8,0));
         
         rigidBodies = [NSMutableSet new];
     }
