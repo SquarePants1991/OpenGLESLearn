@@ -41,6 +41,9 @@
 		D3585DDF1F3953AF003F1076 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDD1F3953AF003F1076 /* sphere.obj */; };
 		D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDE1F3953AF003F1076 /* sphere.mtl */; };
 		D37013B81F0A1433001AEF22 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = D37013B71F0A142E001AEF22 /* normal.png */; };
+		D374E1801FA3292B0036600E /* Billboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D374E17F1FA3292B0036600E /* Billboard.m */; };
+		D374E1821FA32D0A0036600E /* frag_tree.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D374E1811FA32D0A0036600E /* frag_tree.glsl */; };
+		D374E1841FA32E920036600E /* tree.png in Resources */ = {isa = PBXBuildFile; fileRef = D374E1831FA32E920036600E /* tree.png */; };
 		D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */; };
 		D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B61F188D6900EA64DF /* stoneFloor.jpg */; };
 		D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */; };
@@ -123,6 +126,10 @@
 		D3585DDD1F3953AF003F1076 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
 		D3585DDE1F3953AF003F1076 /* sphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.mtl; sourceTree = "<group>"; };
 		D37013B71F0A142E001AEF22 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
+		D374E17E1FA3292B0036600E /* Billboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Billboard.h; sourceTree = "<group>"; };
+		D374E17F1FA3292B0036600E /* Billboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Billboard.m; sourceTree = "<group>"; };
+		D374E1811FA32D0A0036600E /* frag_tree.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_tree.glsl; sourceTree = "<group>"; };
+		D374E1831FA32E920036600E /* tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree.png; sourceTree = "<group>"; };
 		D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stoneFloor_NRM.png; sourceTree = "<group>"; };
 		D383E3B61F188D6900EA64DF /* stoneFloor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stoneFloor.jpg; sourceTree = "<group>"; };
 		D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_shadowmap.glsl; sourceTree = "<group>"; };
@@ -248,6 +255,8 @@
 				D310D8B21F0C821F00734C7F /* Plane.m */,
 				D31210761F6914030012CA4A /* SkyBox.h */,
 				D31210771F6914030012CA4A /* SkyBox.m */,
+				D374E17E1FA3292B0036600E /* Billboard.h */,
+				D374E17F1FA3292B0036600E /* Billboard.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -255,6 +264,7 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D374E1831FA32E920036600E /* tree.png */,
 				D3906E4D1F68DF16009185C8 /* cube-1.tga */,
 				D3906E511F68DF17009185C8 /* cube-2.tga */,
 				D3906E4E1F68DF16009185C8 /* cube-3.tga */,
@@ -295,6 +305,7 @@
 				D310D8B41F0C85F100734C7F /* frag_framebuffer_plane.glsl */,
 				D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */,
 				D3906E4A1F68D4A5009185C8 /* frag_skybox.glsl */,
+				D374E1811FA32D0A0036600E /* frag_tree.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -405,6 +416,7 @@
 				D3F7C2F71EF8F6FD00A6CF8C /* cube.obj in Resources */,
 				8E4D43421EE6AE89007AC649 /* metal_01.png in Resources */,
 				D328744C1F395CA400BD42C8 /* metal.jpg in Resources */,
+				D374E1841FA32E920036600E /* tree.png in Resources */,
 				D3F284221ECB2BE2009783FC /* fragment.glsl in Resources */,
 				8E689D161EA5E1EB00ADB0A8 /* Assets.xcassets in Resources */,
 				8E4D43401EE6AE87007AC649 /* metal_03.png in Resources */,
@@ -415,6 +427,7 @@
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
 				D3906E531F68DF17009185C8 /* cube-1.tga in Resources */,
 				D3585DDC1F3951E6003F1076 /* cube-1.jpg in Resources */,
+				D374E1821FA32D0A0036600E /* frag_tree.glsl in Resources */,
 				D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */,
 				D3906E4B1F68D4A5009185C8 /* frag_skybox.glsl in Resources */,
 				D3585DDB1F3951E6003F1076 /* cube-2.jpg in Resources */,
@@ -465,6 +478,7 @@
 				D31F594A1EF8C26600F55FE7 /* WavefrontOBJ.m in Sources */,
 				8EF0AEF21EE644E5003A4EF9 /* Cylinder.m in Sources */,
 				D310D8B31F0C821F00734C7F /* Plane.m in Sources */,
+				D374E1801FA3292B0036600E /* Billboard.m in Sources */,
 				8E689D0B1EA5E1EB00ADB0A8 /* main.m in Sources */,
 				8EE3673E1EE8FABD005A8D86 /* Terrain.m in Sources */,
 				D31210781F6914030012CA4A /* SkyBox.m in Sources */,

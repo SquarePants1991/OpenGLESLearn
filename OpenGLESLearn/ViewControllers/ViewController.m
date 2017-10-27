@@ -11,6 +11,7 @@
 #import "WavefrontOBJ.h"
 #import "SkyBox.h"
 #import "Terrain.h"
+#import "Billboard.h"
 
 typedef struct  {
     GLKVector3 direction;
@@ -49,6 +50,7 @@ typedef struct {
 @property (assign, nonatomic) DirectionLight light;
 @property (assign, nonatomic) Material material;
 @property (assign, nonatomic) GLKVector3 eyePosition;
+@property (assign, nonatomic) GLKVector3 lookAtVector;
 
 @property (strong, nonatomic) NSMutableArray<GLObject *> * objects;
 @property (assign, nonatomic) BOOL useNormalMap;
@@ -66,7 +68,7 @@ typedef struct {
     
     // 使用透视投影矩阵
     float aspect = self.view.frame.size.width / self.view.frame.size.height;
-    self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(60), aspect, 0.1, 10000.0);
+    self.projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(55), aspect, 0.1, 10000.0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(0, 1, 6.5, 0, 0, 0, 0, 1, 0);
     
     DirectionLight defaultLight;
@@ -85,8 +87,8 @@ typedef struct {
     
     Fog fog;
     fog.fogColor = GLKVector3Make(1, 1,1);
-    fog.fogStart = 0;
-    fog.fogEnd = 200;
+    fog.fogStart = 5;
+    fog.fogEnd = 30;
     fog.fogIndensity = 0.02;
     fog.fogType = FogTypeExpSquare;
     self.fog = fog;
@@ -97,6 +99,31 @@ typedef struct {
     [self createTerrain];
     [self createCubeTexture];
     [self createSkyBox];
+    [self createTrees];
+}
+
+- (void)createTrees {
+    for (int cycleTime = 0; cycleTime < 8; ++cycleTime) {
+        for (int angleSampleCount = 0; angleSampleCount < 9; ++angleSampleCount) {
+            float angle = rand() / (float)RAND_MAX * M_PI * 2.0;
+            float radius = rand() / (float)RAND_MAX * 70 + 20;
+            float xloc = cos(angle) * radius;
+            float zloc = sin(angle) * radius;
+            [self createTree: GLKVector3Make(xloc, 5, zloc)];
+        }
+    }
+}
+
+- (void)createTree:(GLKVector3)position {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_tree" ofType:@".glsl"];
+    GLContext *treeGlContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    
+    GLKTextureInfo *grass = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"tree.png"].CGImage options:nil error:nil];
+    Billboard *tree = [[Billboard alloc] initWithGLContext:treeGlContext texture:grass];
+    [tree setLookAtVectorPointer:&_lookAtVector];
+    tree.modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(position.x, position.y, position.z), GLKMatrix4MakeScale(4.0, 10.0, 4.0));
+    [self.objects addObject:tree];
 }
 
 - (void)createMonkey {
@@ -157,8 +184,9 @@ typedef struct {
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(5 * sin(self.elapsedTime / 1.5), 20, 5 * cos(self.elapsedTime /  1.5));
-    GLKVector3 lookAtPosition = GLKVector3Make(0, 20, 0);
+    self.eyePosition = GLKVector3Make(0, 8, 0);
+    GLKVector3 lookAtPosition = GLKVector3Make(5 * sin(self.elapsedTime / 1.5), 8, 5 * cos(self.elapsedTime /  1.5));
+    self.lookAtVector = GLKVector3Normalize(GLKVector3Subtract(lookAtPosition, self.eyePosition));
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
