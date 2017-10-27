@@ -84,7 +84,7 @@ typedef struct {
     material.smoothness = 0;
     self.material = material;
     
-    self.useNormalMap = YES;
+    self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
     
