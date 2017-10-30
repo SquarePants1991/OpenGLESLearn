@@ -27,6 +27,7 @@
 /// uniform setters
 - (void)setUniform1i:(NSString *)uniformName value:(GLint)value;
 - (void)setUniform1f:(NSString *)uniformName value:(GLfloat)value;
+- (void)setUniform2fv:(NSString *)uniformName value:(GLKVector2)value;
 - (void)setUniform3fv:(NSString *)uniformName value:(GLKVector3)value;
 - (void)setUniform4fv:(NSString *)uniformName value:(GLKVector4)value;
 - (void)setUniformMatrix4fv:(NSString *)uniformName value:(GLKMatrix4)value;

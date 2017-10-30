@@ -42,8 +42,9 @@
 		D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = D3585DDE1F3953AF003F1076 /* sphere.mtl */; };
 		D37013B81F0A1433001AEF22 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = D37013B71F0A142E001AEF22 /* normal.png */; };
 		D374E1801FA3292B0036600E /* Billboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D374E17F1FA3292B0036600E /* Billboard.m */; };
-		D374E1821FA32D0A0036600E /* frag_tree.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D374E1811FA32D0A0036600E /* frag_tree.glsl */; };
+		D374E1821FA32D0A0036600E /* frag_billboard.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D374E1811FA32D0A0036600E /* frag_billboard.glsl */; };
 		D374E1841FA32E920036600E /* tree.png in Resources */ = {isa = PBXBuildFile; fileRef = D374E1831FA32E920036600E /* tree.png */; };
+		D374E1861FA6CAF00036600E /* vtx_billboard.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D374E1851FA6CAF00036600E /* vtx_billboard.glsl */; };
 		D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */; };
 		D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B61F188D6900EA64DF /* stoneFloor.jpg */; };
 		D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */; };
@@ -128,8 +129,9 @@
 		D37013B71F0A142E001AEF22 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
 		D374E17E1FA3292B0036600E /* Billboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Billboard.h; sourceTree = "<group>"; };
 		D374E17F1FA3292B0036600E /* Billboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Billboard.m; sourceTree = "<group>"; };
-		D374E1811FA32D0A0036600E /* frag_tree.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_tree.glsl; sourceTree = "<group>"; };
+		D374E1811FA32D0A0036600E /* frag_billboard.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_billboard.glsl; sourceTree = "<group>"; };
 		D374E1831FA32E920036600E /* tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree.png; sourceTree = "<group>"; };
+		D374E1851FA6CAF00036600E /* vtx_billboard.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vtx_billboard.glsl; sourceTree = "<group>"; };
 		D383E3B51F188D6900EA64DF /* stoneFloor_NRM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stoneFloor_NRM.png; sourceTree = "<group>"; };
 		D383E3B61F188D6900EA64DF /* stoneFloor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stoneFloor.jpg; sourceTree = "<group>"; };
 		D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_shadowmap.glsl; sourceTree = "<group>"; };
@@ -305,7 +307,8 @@
 				D310D8B41F0C85F100734C7F /* frag_framebuffer_plane.glsl */,
 				D383E3B91F18C3BC00EA64DF /* frag_shadowmap.glsl */,
 				D3906E4A1F68D4A5009185C8 /* frag_skybox.glsl */,
-				D374E1811FA32D0A0036600E /* frag_tree.glsl */,
+				D374E1811FA32D0A0036600E /* frag_billboard.glsl */,
+				D374E1851FA6CAF00036600E /* vtx_billboard.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -427,13 +430,14 @@
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
 				D3906E531F68DF17009185C8 /* cube-1.tga in Resources */,
 				D3585DDC1F3951E6003F1076 /* cube-1.jpg in Resources */,
-				D374E1821FA32D0A0036600E /* frag_tree.glsl in Resources */,
+				D374E1821FA32D0A0036600E /* frag_billboard.glsl in Resources */,
 				D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */,
 				D3906E4B1F68D4A5009185C8 /* frag_skybox.glsl in Resources */,
 				D3585DDB1F3951E6003F1076 /* cube-2.jpg in Resources */,
 				D3585DD91F3951E6003F1076 /* cube-3.jpg in Resources */,
 				D3585DDF1F3953AF003F1076 /* sphere.obj in Resources */,
 				D3585DDA1F3951E6003F1076 /* cube-4.jpg in Resources */,
+				D374E1861FA6CAF00036600E /* vtx_billboard.glsl in Resources */,
 				D3585DD71F3951E6003F1076 /* cube-5.jpg in Resources */,
 				D3585DD81F3951E6003F1076 /* cube-6.jpg in Resources */,
 				D3906E541F68DF17009185C8 /* cube-3.tga in Resources */,

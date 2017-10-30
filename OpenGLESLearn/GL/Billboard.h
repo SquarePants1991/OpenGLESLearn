@@ -9,8 +9,11 @@
 #import "GLObject.h"
 
 @interface Billboard : GLObject
+@property (assign, nonatomic) GLKVector2 billboardSize;
+@property (assign, nonatomic) GLKVector3 billboardCenterPosition;
+@property (assign, nonatomic) BOOL lockToYAxis;
+
 - (instancetype)initWithGLContext:(GLContext *)context texture:(GLKTextureInfo *)texture;
-- (void)setLookAtVectorPointer:(GLKVector3 *)lookAtVector;
 - (void)update:(NSTimeInterval)timeSinceLastUpdate;
 - (void)draw:(GLContext *)glContext;
 @end

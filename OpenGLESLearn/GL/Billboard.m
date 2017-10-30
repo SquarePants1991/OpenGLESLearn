@@ -12,8 +12,6 @@
     GLuint vbo;
     GLuint vao;
     GLKTextureInfo * diffuseTexture;
-    GLKVector3 *lookAtVectorPointer;
-    GLKMatrix4 forwardRotationMatrix;
 }
 @end
 
@@ -23,16 +21,11 @@
     self = [super initWithGLContext:context];
     if (self) {
         self.modelMatrix = GLKMatrix4Identity;
-        forwardRotationMatrix = GLKMatrix4Identity;
         diffuseTexture = texture;
         [self genVBO];
         [self genVAO];
     }
     return self;
-}
-
-- (void)setLookAtVectorPointer:(GLKVector3 *)lookAtVector {
-    lookAtVectorPointer = lookAtVector;
 }
 
 - (void)dealloc {
@@ -69,27 +62,19 @@
 }
 
 - (void)update:(NSTimeInterval)timeSinceLastUpdate {
-    GLKVector3 newForwardVector = GLKVector3MultiplyScalar(*lookAtVectorPointer, -1);
-    // 移除newForwardVector的y分量
-    newForwardVector.y = 0;
-    newForwardVector = GLKVector3Normalize(newForwardVector);
-    GLKVector3 oldForwardVector = GLKVector3Make(0, 0, 1);
-    GLKVector3 axis = GLKVector3Normalize(GLKVector3CrossProduct(oldForwardVector, newForwardVector));
-    float acosValue = GLKVector3DotProduct(oldForwardVector, newForwardVector);
-    float angle = acos(acosValue);
-    GLKQuaternion quaternion = GLKQuaternionMakeWithAngleAndAxis(angle, axis.x, axis.y, axis.z);
-    forwardRotationMatrix = GLKMatrix4MakeWithQuaternion(quaternion);
+
 }
 
 - (void)draw:(GLContext *)glContext {
-    glDisable(GL_CULL_FACE);
-    [glContext setUniformMatrix4fv:@"modelMatrix" value:GLKMatrix4Multiply(self.modelMatrix, forwardRotationMatrix)];
+    [glContext setUniformMatrix4fv:@"modelMatrix" value:self.modelMatrix];
+    [glContext setUniform2fv:@"billboardSize" value:self.billboardSize];
+    [glContext setUniform3fv:@"billboardCenterPosition" value:self.billboardCenterPosition];
+    [glContext setUniform1i:@"lockToYAxis" value:self.lockToYAxis];
     bool canInvert;
     GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(self.modelMatrix, &canInvert);
     [glContext setUniformMatrix4fv:@"normalMatrix" value:canInvert ? normalMatrix : GLKMatrix4Identity];
     [glContext bindTextureName:diffuseTexture.name to:GL_TEXTURE0 uniformName:@"diffuseMap"];
     [glContext drawTrianglesWithVAO:vao vertexCount:6];
-    glEnable(GL_CULL_FACE);
 }
 
 @end

@@ -94,6 +94,11 @@
     glUniform1f(location, value);
 }
 
+- (void)setUniform2fv:(NSString *)uniformName value:(GLKVector2)value {
+    GLuint location = glGetUniformLocation(self.program, uniformName.UTF8String);
+    glUniform2fv(location, 1, value.v);
+}
+
 - (void)setUniform3fv:(NSString *)uniformName value:(GLKVector3)value {
     GLuint location = glGetUniformLocation(self.program, uniformName.UTF8String);
     glUniform3fv(location, 1, value.v);
