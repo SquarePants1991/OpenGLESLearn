@@ -55,6 +55,10 @@
 		D3906E551F68DF17009185C8 /* cube-4.tga in Resources */ = {isa = PBXBuildFile; fileRef = D3906E4F1F68DF16009185C8 /* cube-4.tga */; };
 		D3906E561F68DF17009185C8 /* cube-5.tga in Resources */ = {isa = PBXBuildFile; fileRef = D3906E501F68DF17009185C8 /* cube-5.tga */; };
 		D3906E571F68DF17009185C8 /* cube-2.tga in Resources */ = {isa = PBXBuildFile; fileRef = D3906E511F68DF17009185C8 /* cube-2.tga */; };
+		D3A936CC1FB149A500EA11FA /* ParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A936CB1FB149A500EA11FA /* ParticleSystem.m */; };
+		D3A936CE1FB18CFD00EA11FA /* qrcode.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A936CD1FB18CFD00EA11FA /* qrcode.png */; };
+		D3A936D01FB1A0C600EA11FA /* particle.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A936CF1FB1A0C600EA11FA /* particle.png */; };
+		D3A936D21FB1A21600EA11FA /* frag_particle.glsl in Resources */ = {isa = PBXBuildFile; fileRef = D3A936D11FB1A21600EA11FA /* frag_particle.glsl */; };
 		D3BD84091F177624002F5DB1 /* squarepants.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D3BD84081F177618002F5DB1 /* squarepants.jpg */; };
 		D3F2841E1ECB2BE2009783FC /* Cube.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284111ECB2BE2009783FC /* Cube.m */; };
 		D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F284131ECB2BE2009783FC /* GLContext.m */; };
@@ -142,6 +146,11 @@
 		D3906E4F1F68DF16009185C8 /* cube-4.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cube-4.tga"; sourceTree = "<group>"; };
 		D3906E501F68DF17009185C8 /* cube-5.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cube-5.tga"; sourceTree = "<group>"; };
 		D3906E511F68DF17009185C8 /* cube-2.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cube-2.tga"; sourceTree = "<group>"; };
+		D3A936CA1FB149A500EA11FA /* ParticleSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		D3A936CB1FB149A500EA11FA /* ParticleSystem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticleSystem.m; sourceTree = "<group>"; };
+		D3A936CD1FB18CFD00EA11FA /* qrcode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrcode.png; sourceTree = "<group>"; };
+		D3A936CF1FB1A0C600EA11FA /* particle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle.png; sourceTree = "<group>"; };
+		D3A936D11FB1A21600EA11FA /* frag_particle.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag_particle.glsl; sourceTree = "<group>"; };
 		D3BD84081F177618002F5DB1 /* squarepants.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = squarepants.jpg; sourceTree = "<group>"; };
 		D3F284101ECB2BE2009783FC /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
 		D3F284111ECB2BE2009783FC /* Cube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cube.m; sourceTree = "<group>"; };
@@ -259,6 +268,8 @@
 				D31210771F6914030012CA4A /* SkyBox.m */,
 				D374E17E1FA3292B0036600E /* Billboard.h */,
 				D374E17F1FA3292B0036600E /* Billboard.m */,
+				D3A936CA1FB149A500EA11FA /* ParticleSystem.h */,
+				D3A936CB1FB149A500EA11FA /* ParticleSystem.m */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -266,6 +277,8 @@
 		D3F284181ECB2BE2009783FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D3A936CF1FB1A0C600EA11FA /* particle.png */,
+				D3A936CD1FB18CFD00EA11FA /* qrcode.png */,
 				D374E1831FA32E920036600E /* tree.png */,
 				D3906E4D1F68DF16009185C8 /* cube-1.tga */,
 				D3906E511F68DF17009185C8 /* cube-2.tga */,
@@ -309,6 +322,7 @@
 				D3906E4A1F68D4A5009185C8 /* frag_skybox.glsl */,
 				D374E1811FA32D0A0036600E /* frag_billboard.glsl */,
 				D374E1851FA6CAF00036600E /* vtx_billboard.glsl */,
+				D3A936D11FB1A21600EA11FA /* frag_particle.glsl */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -428,10 +442,12 @@
 				D383E3B71F188D7300EA64DF /* stoneFloor_NRM.png in Resources */,
 				D383E3B81F188D7300EA64DF /* stoneFloor.jpg in Resources */,
 				8E75693B1EE93A3D004CC68F /* dirt_01.jpg in Resources */,
+				D3A936D21FB1A21600EA11FA /* frag_particle.glsl in Resources */,
 				D3906E531F68DF17009185C8 /* cube-1.tga in Resources */,
 				D3585DDC1F3951E6003F1076 /* cube-1.jpg in Resources */,
 				D374E1821FA32D0A0036600E /* frag_billboard.glsl in Resources */,
 				D3585DE01F3953AF003F1076 /* sphere.mtl in Resources */,
+				D3A936CE1FB18CFD00EA11FA /* qrcode.png in Resources */,
 				D3906E4B1F68D4A5009185C8 /* frag_skybox.glsl in Resources */,
 				D3585DDB1F3951E6003F1076 /* cube-2.jpg in Resources */,
 				D3585DD91F3951E6003F1076 /* cube-3.jpg in Resources */,
@@ -442,6 +458,7 @@
 				D3585DD81F3951E6003F1076 /* cube-6.jpg in Resources */,
 				D3906E541F68DF17009185C8 /* cube-3.tga in Resources */,
 				8EFB90101EE8FEAF0083B1C6 /* terrain_01.jpg in Resources */,
+				D3A936D01FB1A0C600EA11FA /* particle.png in Resources */,
 				D310D8B51F0C85F100734C7F /* frag_framebuffer_plane.glsl in Resources */,
 				D3906E551F68DF17009185C8 /* cube-4.tga in Resources */,
 				D383E3BA1F18C3BC00EA64DF /* frag_shadowmap.glsl in Resources */,
@@ -475,6 +492,7 @@
 				D3F284211ECB2BE2009783FC /* Laser.m in Sources */,
 				D3F2842D1ECB2C46009783FC /* ViewController.m in Sources */,
 				D3F284201ECB2BE2009783FC /* GLObject.m in Sources */,
+				D3A936CC1FB149A500EA11FA /* ParticleSystem.m in Sources */,
 				D3F2842C1ECB2C46009783FC /* GLBaseViewController.m in Sources */,
 				D3F2841F1ECB2BE2009783FC /* GLContext.m in Sources */,
 				8EF0AEF51EE647D7003A4EF9 /* GLGeometry.m in Sources */,

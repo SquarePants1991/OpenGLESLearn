@@ -58,7 +58,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     // 清空之前的绘制
-    glClearColor(0.7, 0.7, 0.7, 1);
+    glClearColor(0.1, 0.1, 0.1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     [self.glContext active];

@@ -12,6 +12,7 @@
 #import "SkyBox.h"
 #import "Terrain.h"
 #import "Billboard.h"
+#import "ParticleSystem.h"
 
 typedef struct  {
     GLKVector3 direction;
@@ -98,10 +99,36 @@ typedef struct {
     self.useNormalMap = NO;
     
     self.objects = [NSMutableArray new];
-    [self createTerrain];
-    [self createCubeTexture];
-    [self createSkyBox];
-    [self createTrees];
+//    [self createTerrain];
+//    [self createCubeTexture];
+//    [self createSkyBox];
+//    [self createTrees];
+    [self createParticles];
+}
+
+- (void)createParticles {
+    NSString *vertexShaderPath = [[NSBundle mainBundle] pathForResource:@"vtx_billboard" ofType:@".glsl"];
+    NSString *fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"frag_particle" ofType:@".glsl"];
+    GLContext *particleContext = [GLContext contextWithVertexShaderPath:vertexShaderPath fragmentShaderPath:fragmentShaderPath];
+    
+    ParticleSystemConfig config;
+    config.birthRate = 0.3;
+    config.emissionBoxExtends = GLKVector3Make(0.6,0.6,0.6);
+    config.emissionBoxTransform = GLKMatrix4MakeTranslation(0, -4, 0);
+    config.startLife = 1;
+    config.endLife = 2;
+    config.startSpeed = GLKVector3Make(-1.6, 12.5, -1.6);
+    config.endSpeed = GLKVector3Make(1.6, 12.5, 1.6);
+    config.startSize = 1.9;
+    config.endSize = 2.6;
+    config.startColor = GLKVector3Make(0, 0, 0);
+    config.endColor = GLKVector3Make(0.6, 0.5, 0.6);
+    config.maxParticles = 600;
+    
+    GLKTextureInfo *qrcode = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"particle.png"].CGImage options:nil error:nil];
+    
+    ParticleSystem *particleSystem = [[ParticleSystem alloc] initWithGLContext:particleContext config:config particleTexture:qrcode];
+    [self.objects addObject:particleSystem];
 }
 
 - (void)createTrees {
@@ -187,8 +214,8 @@ typedef struct {
 
 - (void)update {
     [super update];
-    self.eyePosition = GLKVector3Make(0, 13, 0);
-    GLKVector3 lookAtPosition = GLKVector3Make(5 * sin(self.elapsedTime / 1.5), 13, 5 * cos(self.elapsedTime /  1.5));
+    self.eyePosition = GLKVector3Make(0, 14, 17);
+    GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.lookAtVector = GLKVector3Normalize(GLKVector3Subtract(lookAtPosition, self.eyePosition));
     self.cameraMatrix = GLKMatrix4MakeLookAt(self.eyePosition.x, self.eyePosition.y, self.eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     
@@ -241,7 +268,7 @@ typedef struct {
 
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    glClearColor(0.7, 0.7, 0.7, 1);
+    glClearColor(0.1, 0.1, 0.1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     [self drawObjects];
 }
