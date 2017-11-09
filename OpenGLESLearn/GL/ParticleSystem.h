@@ -22,7 +22,7 @@ typedef struct {
     GLKVector3 startColor;
     GLKVector3 endColor;
     GLKVector3 emissionBoxExtends;
-    GLKMatrix4 emissionBoxTransform; // translate & rotate only
+    GLKMatrix4 emissionBoxTransform; // translate only
 } ParticleSystemConfig;
 
 @interface Particle: Billboard
