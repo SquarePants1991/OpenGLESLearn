@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "GLContext.h"
 #import "Cube.h"
-#import "Cylinder.h"
+#import "Building.h"
 
 @interface ViewController ()
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
@@ -53,17 +53,16 @@
     GLKTextureInfo *metal2 = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"metal_02.jpg"].CGImage options:nil error:nil];
     GLKTextureInfo *metal3 = [GLKTextureLoader textureWithCGImage:[UIImage imageNamed:@"metal_03.png"].CGImage options:nil error:nil];
     // 四边的圆柱体就是一个四方体
-    Cylinder * cylinder = [[Cylinder alloc] initWithGLContext:self.glContext sides:4 radius:0.9 height:1.2 texture:metal1];
-    cylinder.modelMatrix = GLKMatrix4MakeTranslation(0, 2, 0);
+    NSMutableArray *shape = [NSMutableArray new];
+    [shape addObject:[NSValue valueWithCGPoint:CGPointMake(-0.4, -0.3)]];
+    [shape addObject:[NSValue valueWithCGPoint:CGPointMake(0.3, -0.34)]];
+    [shape addObject:[NSValue valueWithCGPoint:CGPointMake(0.15, 0.38)]];
+    [shape addObject:[NSValue valueWithCGPoint:CGPointMake(0, 0.58)]];
+    [shape addObject:[NSValue valueWithCGPoint:CGPointMake(-0.2, 0.3)]];
+    
+    Building * cylinder = [[Building alloc] initWithGLContext:self.glContext shape:shape height:1.2 texture:metal1];
+    cylinder.modelMatrix = GLKMatrix4MakeTranslation(0, 0, 0);
     [self.objects addObject:cylinder];
-    
-    Cylinder * cylinder2 = [[Cylinder alloc] initWithGLContext:self.glContext sides:16 radius:0.2 height:4.0 texture:metal3];
-    [self.objects addObject:cylinder2];
-    
-    // 四边的圆柱体就是一个正方体
-    Cylinder * cylinder3 = [[Cylinder alloc] initWithGLContext:self.glContext sides:4 radius:0.41 height:0.3 texture:metal2];
-    cylinder3.modelMatrix = GLKMatrix4MakeTranslation(0, -2, 0);
-    [self.objects addObject:cylinder3];
 }
 
 #pragma mark - Update Delegate
