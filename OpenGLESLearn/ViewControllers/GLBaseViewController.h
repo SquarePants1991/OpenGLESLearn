@@ -9,10 +9,12 @@
 #import <GLKit/GLKit.h>
 
 @class GLContext;
-@interface GLBaseViewController : GLKViewController
+@interface GLBaseViewController : UIViewController
 @property (strong, nonatomic) GLContext * glContext;
 @property (assign, nonatomic) GLfloat elapsedTime;
+@property (assign, nonatomic) NSTimeInterval timeSinceLastUpdate;
 
 - (void)update;
 - (void)bindAttribs:(GLfloat *)triangleData;
+- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 @end

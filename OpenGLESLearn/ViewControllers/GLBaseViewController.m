@@ -9,7 +9,10 @@
 #import "GLBaseViewController.h"
 #import "GLContext.h"
 
-@interface GLBaseViewController ()
+@interface GLBaseViewController () <GLKViewDelegate> {
+    CADisplayLink *_displayLink;
+    NSTimeInterval _lastUpdateTime;
+}
 @property (strong, nonatomic) EAGLContext *context;
 @end
 
@@ -19,20 +22,38 @@
     [super viewDidLoad];
     [self setupContext];
     [self setupGLContext];
+    [self setupRenderLoop];
+}
+
+- (void)setupRenderLoop {
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(renderLoop:)];
+    // 设置偏好帧率
+    _displayLink.preferredFramesPerSecond = 60;
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    _lastUpdateTime = [[NSDate date] timeIntervalSince1970];
+    self.timeSinceLastUpdate = 0;
+}
+
+- (void)renderLoop:(CADisplayLink *)displayLink {
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timeSinceLastUpdate = now - _lastUpdateTime;
+    self.timeSinceLastUpdate = timeSinceLastUpdate;
+    _lastUpdateTime = now;
+    [self update];
+    [(GLKView *)self.view display];
 }
 
 #pragma mark - Setup Context
 - (void)setupContext {
     // 使用OpenGL ES2, ES2之后都采用Shader来管理渲染管线
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    // 设置帧率为60fps
-    self.preferredFramesPerSecond = 60;
     if (!self.context) {
         NSLog(@"Failed to create ES context");
     }
     
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
+    view.delegate = self;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     view.drawableMultisample = GLKViewDrawableMultisample4X;
     [EAGLContext setCurrentContext:self.context];
@@ -51,9 +72,8 @@
 
 - (void)update {
     // 距离上一次调用update过了多长时间，比如一个游戏物体速度是3m/s,那么每一次调用update，
-    // 他就会行走3m/s * deltaTime，这样做就可以让游戏物体的行走实际速度与update调用频次无关
-    NSTimeInterval deltaTime = self.timeSinceLastUpdate;
-    self.elapsedTime += deltaTime;
+    // 他就会行走3m/s * timeSinceLastUpdate，这样做就可以让游戏物体的行走实际速度与update调用频次无关
+    self.elapsedTime += self.timeSinceLastUpdate;
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {

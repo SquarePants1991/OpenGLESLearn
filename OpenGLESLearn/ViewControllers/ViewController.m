@@ -12,7 +12,11 @@
 #import "Cylinder.h"
 #import "Terrain.h"
 
-@interface ViewController ()
+@interface ViewController () {
+    CGPoint _beginDegree;
+    CGPoint _currentDegree;
+    Terrain *terrain;
+}
 @property (assign, nonatomic) GLKMatrix4 projectionMatrix; // 投影矩阵
 @property (assign, nonatomic) GLKMatrix4 cameraMatrix; // 观察矩阵
 @property (assign, nonatomic) GLKVector3 lightDirection; // 平行光光照方向
@@ -37,6 +41,9 @@
 
     self.objects = [NSMutableArray new];
     [self createTerrain];
+    
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panned:)];
+    [self.view addGestureRecognizer:panGesture];
 }
 
 - (void)createCubes {
@@ -85,16 +92,31 @@
 
     
     UIImage *heightMap = [UIImage imageNamed:@"terrain_01.jpg"];
-    Terrain *terrain = [[Terrain alloc] initWithGLContext:terrainContext heightMap:heightMap size:CGSizeMake(500, 500) height:100 grass:grass dirt:dirt];
+    terrain = [[Terrain alloc] initWithGLContext:terrainContext heightMap:heightMap size:CGSizeMake(500, 500) height:100 grass:grass dirt:dirt];
     terrain.modelMatrix = GLKMatrix4MakeTranslation(-250, 0, -250);
     [self.objects addObject:terrain];
+}
+
+- (void)panned:(UIPanGestureRecognizer *)panGesture {
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
+        _beginDegree = _currentDegree;
+    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [panGesture translationInView:self.view];
+        _currentDegree.x = _beginDegree.x + translation.x;
+        _currentDegree.y = _beginDegree.y + translation.y;
+        GLKMatrix4 rotateAroundYMatrix = GLKMatrix4MakeRotation(_currentDegree.x * M_PI / 180.0, 0, 1, 0);
+        GLKMatrix4 rotateAroundXMatrix = GLKMatrix4MakeRotation(_currentDegree.y * M_PI / 180.0, 1, 0, 0);
+        GLKMatrix4 translateMatrix = GLKMatrix4MakeTranslation(-250, 0, -250);
+        GLKMatrix4 finalMatrix = GLKMatrix4Multiply(GLKMatrix4Multiply(rotateAroundYMatrix, rotateAroundXMatrix), translateMatrix);
+        terrain.modelMatrix = finalMatrix;
+    }
 }
 
 #pragma mark - Update Delegate
 
 - (void)update {
     [super update];
-    GLKVector3 eyePosition = GLKVector3Make(500 * sin(self.elapsedTime / 2.0), sin(self.elapsedTime) * 50 + 250, 500 * cos(self.elapsedTime / 2.0));
+    GLKVector3 eyePosition = GLKVector3Make(500, 250, 500);
     GLKVector3 lookAtPosition = GLKVector3Make(0, 0, 0);
     self.cameraMatrix = GLKMatrix4MakeLookAt(eyePosition.x, eyePosition.y, eyePosition.z, lookAtPosition.x, lookAtPosition.y, lookAtPosition.z, 0, 1, 0);
     [self.objects enumerateObjectsUsingBlock:^(GLObject *obj, NSUInteger idx, BOOL *stop) {
